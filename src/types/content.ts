@@ -1,0 +1,100 @@
+export interface StatItem {
+  icon: string;
+  label: string;
+  value: string;
+}
+
+export interface TraitItem {
+  icon: string;
+  title: string;
+  subtitle: string;
+}
+
+export interface SkillItem {
+  name: string;
+  percent: number;
+}
+
+export interface ToolItem {
+  name: string;
+  icon: string;
+}
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  quote: string;
+  avatarKey?: string;
+}
+
+export interface SiteContent {
+  hero: {
+    greeting: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+    description: string;
+    portraitKey: string;
+    backgroundKey: string;
+    cvKey: string;
+  };
+  socials: { platform: string; url: string }[];
+  traits: TraitItem[];
+  about: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    tags: string[];
+    stats: StatItem[];
+  };
+  skills: SkillItem[];
+  tools: ToolItem[];
+  testimonials: Testimonial[];
+  contact: {
+    email: string;
+    phone: string;
+    location: string;
+  };
+  seo: {
+    title: string;
+    description: string;
+  };
+}
+
+export interface ProjectSection {
+  heading: string;
+  body: string;
+}
+
+export interface ProjectMediaItem {
+  type: "image" | "pdf" | "video";
+  key: string;
+  caption?: string;
+}
+
+export interface Project {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  summary: string;
+  technologies: string[];
+  coverImageKey: string;
+  featured: boolean;
+  order: number;
+  status: "draft" | "published";
+  problemStatement: string;
+  objectives: string;
+  designProcess: string;
+  implementation: string;
+  results: string;
+  challenges: string;
+  lessonsLearned: string;
+  gallery: ProjectMediaItem[];
+  documents: ProjectMediaItem[];
+  videos: ProjectMediaItem[];
+  createdAt: string;
+  updatedAt: string;
+}
