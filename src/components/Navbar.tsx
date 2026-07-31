@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Menu, X, Send } from "lucide-react";
+import Logo from "./Logo";
 
 const LINKS = [
   { href: "#home", label: "Home" },
@@ -28,10 +29,7 @@ export default function Navbar({
     <header className="sticky top-0 z-50 glass shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-accent-500 font-bold text-white">
-            {firstName?.[0]}
-            {lastName?.[0]}
-          </div>
+          <Logo size={40} />
           <div>
             <p className="text-sm font-bold leading-tight text-ink-900">
               {firstName?.toUpperCase()} {lastName?.toUpperCase()}
