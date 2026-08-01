@@ -24,7 +24,7 @@ export default function Hero({ content }: { content: SiteContent }) {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(6,66,72,0.06) 0%, rgba(6,66,72,0.10) 45%, rgba(6,66,72,0.22) 80%, var(--background) 100%)",
+                "linear-gradient(to bottom, transparent 0%, transparent 62%, rgba(255,255,255,0.35) 76%, rgba(47,120,245,0.18) 87%, rgba(16,185,129,0.18) 95%, var(--background) 100%)",
             }}
           />
         </div>
