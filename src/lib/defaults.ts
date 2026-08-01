@@ -56,6 +56,7 @@ export const defaultContent: SiteContent = {
     { name: "VS Code", icon: "vscode" },
   ],
   testimonials: [],
+  experience: [],
   contact: { email: "", phone: "", location: "" },
   seo: {
     title: "Alex Kariuki | Electrical & Electronics Engineer",

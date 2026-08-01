@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import SkillsSidebar from "@/components/SkillsSidebar";
 import FeaturedProjects from "@/components/FeaturedProjects";
+import Experience from "@/components/Experience";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -32,6 +33,7 @@ export default async function Home() {
         <SkillsSidebar content={content} />
       </div>
 
+      <Experience items={content.experience} />
       <Testimonials items={content.testimonials} />
       <Contact content={content} />
       <Footer content={content} />

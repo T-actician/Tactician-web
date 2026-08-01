@@ -20,6 +20,15 @@ export interface ToolItem {
   icon: string;
 }
 
+export interface ExperienceItem {
+  id: string;
+  role: string;
+  company: string;
+  period: string;
+  description: string;
+  current: boolean;
+}
+
 export interface Testimonial {
   id: string;
   name: string;
@@ -51,6 +60,7 @@ export interface SiteContent {
   };
   skills: SkillItem[];
   tools: ToolItem[];
+  experience: ExperienceItem[];
   testimonials: Testimonial[];
   contact: {
     email: string;
