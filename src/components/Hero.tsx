@@ -17,7 +17,7 @@ function highlightKeywords(text: string, words: string[]) {
   const parts = text.split(pattern);
   return parts.map((part, i) =>
     words.some((w) => w.toLowerCase() === part.toLowerCase()) ? (
-      <span key={i} className="text-amber-500">
+      <span key={i} className="text-gradient-gold font-extrabold">
         {part}
       </span>
     ) : (
@@ -85,7 +85,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           </div>
 
           <div className="mt-8 flex items-center gap-4">
-            <span className="text-sm font-bold text-amber-500">Connect with me</span>
+            <span className="text-gradient-gold text-sm font-bold">Connect with me</span>
             {socials.map((s) => {
               const Icon = SOCIAL_ICONS[s.platform] ?? Mail;
               return (
