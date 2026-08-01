@@ -81,7 +81,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="relative mx-auto aspect-[3/4] w-full max-w-md"
+          className="relative mx-auto aspect-[3/4] w-full max-w-md lg:self-end lg:-mb-14"
         >
           <div className="absolute inset-0 scale-110 rounded-full bg-gradient-to-br from-brand-200/50 to-accent-400/30 blur-3xl" />
           {portraitUrl ? (
