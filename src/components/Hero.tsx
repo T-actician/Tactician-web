@@ -9,6 +9,23 @@ import { SiteContent } from "@/types/content";
 const ICONS: Record<string, any> = { zap: Zap, target: Target, shield: Shield, lightbulb: Lightbulb };
 const SOCIAL_ICONS: Record<string, any> = { linkedin: FaLinkedinIn, github: FaGithub, email: Mail, phone: Phone };
 
+// Wraps matching words/phrases from `words` in an accent color + bold, leaving
+// the rest of the text and its content untouched.
+function highlightKeywords(text: string, words: string[]) {
+  if (!text) return text;
+  const pattern = new RegExp(`(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`, "gi");
+  const parts = text.split(pattern);
+  return parts.map((part, i) =>
+    words.some((w) => w.toLowerCase() === part.toLowerCase()) ? (
+      <span key={i} className="text-accent-600">
+        {part}
+      </span>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+}
+
 export default function Hero({ content }: { content: SiteContent }) {
   const { hero, traits, socials } = content;
   const portraitUrl = hero.portraitKey ? `/api/media/${hero.portraitKey}` : "";
@@ -46,7 +63,9 @@ export default function Hero({ content }: { content: SiteContent }) {
             Electrical &amp; <span className="text-brand-600">Electronics</span>{" "}
             <span className="text-accent-500">Engineer</span>
           </h2>
-          <p className="mt-5 max-w-lg text-slate-800">{hero.description}</p>
+          <p className="mt-5 max-w-lg text-lg font-bold text-ink-900">
+            {highlightKeywords(hero.description, ["efficient", "reliable", "innovative", "improve lives"])}
+          </p>
 
           <div className="mt-7 flex flex-wrap gap-4">
             <a
