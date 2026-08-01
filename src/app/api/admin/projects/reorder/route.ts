@@ -6,17 +6,22 @@ import { requireAdmin } from "@/lib/auth-guard";
 
 // body: { orderedIds: string[] }
 export async function PUT(req: NextRequest) {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const user = await requireAdmin();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { orderedIds }: { orderedIds: string[] } = await req.json();
-  const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
+    const { orderedIds }: { orderedIds: string[] } = await req.json();
+    const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
 
-  const updated = projects.map((p) => {
-    const newOrder = orderedIds.indexOf(p.id);
-    return newOrder === -1 ? p : { ...p, order: newOrder };
-  });
+    const updated = projects.map((p) => {
+      const newOrder = orderedIds.indexOf(p.id);
+      return newOrder === -1 ? p : { ...p, order: newOrder };
+    });
 
-  await putJSON(PROJECTS_KEY, updated);
-  return NextResponse.json({ success: true });
+    await putJSON(PROJECTS_KEY, updated);
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    console.error("PUT /api/admin/projects/reorder failed:", err);
+    return NextResponse.json({ error: err.message || "Failed to reorder projects" }, { status: 500 });
+  }
 }

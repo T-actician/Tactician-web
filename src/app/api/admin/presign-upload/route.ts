@@ -11,17 +11,22 @@ const ALLOWED = {
 } as const;
 
 export async function POST(req: NextRequest) {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    const user = await requireAdmin();
+    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { folder, contentType } = await req.json();
+    const { folder, contentType } = await req.json();
 
-  const ext = ALLOWED[contentType as keyof typeof ALLOWED];
-  if (!ext) return NextResponse.json({ error: "Unsupported video type" }, { status: 400 });
+    const ext = ALLOWED[contentType as keyof typeof ALLOWED];
+    if (!ext) return NextResponse.json({ error: "Unsupported video type" }, { status: 400 });
 
-  const key = `${folder || "uploads"}/${randomUUID()}.${ext}`;
-  const uploadUrl = await getSignedPutUrl(key, contentType, 3600);
-  const type = contentType === "application/pdf" ? "pdf" : "video";
+    const key = `${folder || "uploads"}/${randomUUID()}.${ext}`;
+    const uploadUrl = await getSignedPutUrl(key, contentType, 3600);
+    const type = contentType === "application/pdf" ? "pdf" : "video";
 
-  return NextResponse.json({ uploadUrl, key, type });
+    return NextResponse.json({ uploadUrl, key, type });
+  } catch (err: any) {
+    console.error("POST /api/admin/presign-upload failed:", err);
+    return NextResponse.json({ error: err.message || "Failed to prepare upload" }, { status: 500 });
+  }
 }

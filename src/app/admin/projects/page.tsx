@@ -9,12 +9,23 @@ import { Project } from "@/types/content";
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("/api/admin/projects")
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) {
+          const data = await r.json().catch(() => ({ error: `Request failed (${r.status})` }));
+          throw new Error(data.error || `Request failed (${r.status})`);
+        }
+        return r.json();
+      })
       .then((data) => {
-        setProjects(data);
+        setProjects(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load projects");
         setLoading(false);
       });
   }, []);
@@ -49,6 +60,12 @@ export default function AdminProjectsPage() {
   }
 
   if (loading) return <p className="text-slate-500">Loading...</p>;
+  if (error)
+    return (
+      <div className="rounded-xl bg-red-50 p-4 text-sm text-red-600">
+        {error}. If this mentions &quot;Unauthorized&quot; or times out, check that your Supabase project isn&apos;t paused, then refresh.
+      </div>
+    );
 
   return (
     <div>
