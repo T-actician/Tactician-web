@@ -6,18 +6,22 @@ import Image from "next/image";
 import { X } from "lucide-react";
 import { Project, ProjectMediaItem } from "@/types/content";
 import MediaUploader from "@/components/admin/MediaUploader";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 
-const TEXT_FIELDS: { key: keyof Project; label: string; textarea?: boolean }[] = [
+const SIMPLE_FIELDS: { key: keyof Project; label: string; textarea?: boolean }[] = [
   { key: "title", label: "Title" },
   { key: "category", label: "Category" },
   { key: "summary", label: "Summary", textarea: true },
-  { key: "problemStatement", label: "Problem Statement", textarea: true },
-  { key: "objectives", label: "Objectives", textarea: true },
-  { key: "designProcess", label: "Design Process", textarea: true },
-  { key: "implementation", label: "Implementation", textarea: true },
-  { key: "results", label: "Results", textarea: true },
-  { key: "challenges", label: "Challenges Encountered", textarea: true },
-  { key: "lessonsLearned", label: "Lessons Learned", textarea: true },
+];
+
+const RICH_FIELDS: { key: keyof Project; label: string }[] = [
+  { key: "problemStatement", label: "Problem Statement" },
+  { key: "objectives", label: "Objectives" },
+  { key: "designProcess", label: "Design Process" },
+  { key: "implementation", label: "Implementation" },
+  { key: "results", label: "Results" },
+  { key: "challenges", label: "Challenges Encountered" },
+  { key: "lessonsLearned", label: "Lessons Learned" },
 ];
 
 const emptyProject: Partial<Project> = {
@@ -81,12 +85,12 @@ export default function ProjectForm({ initial, id }: { initial?: Project; id?: s
 
   return (
     <div className="flex flex-col gap-6 pb-20">
-      {TEXT_FIELDS.map((f) => (
+      {SIMPLE_FIELDS.map((f) => (
         <div key={f.key as string}>
           <label className="mb-1 block text-sm font-semibold text-ink-900">{f.label}</label>
           {f.textarea ? (
             <textarea
-              rows={4}
+              rows={3}
               value={(data[f.key] as string) || ""}
               onChange={(e) => update(f.key, e.target.value as any)}
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-500"
@@ -98,6 +102,13 @@ export default function ProjectForm({ initial, id }: { initial?: Project; id?: s
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-500"
             />
           )}
+        </div>
+      ))}
+
+      {RICH_FIELDS.map((f) => (
+        <div key={f.key as string}>
+          <label className="mb-1 block text-sm font-semibold text-ink-900">{f.label}</label>
+          <RichTextEditor value={(data[f.key] as string) || ""} onChange={(html) => update(f.key, html as any)} />
         </div>
       ))}
 

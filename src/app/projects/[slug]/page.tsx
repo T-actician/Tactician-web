@@ -55,7 +55,10 @@ export default async function ProjectDetail({
               project[s.key] && (
                 <div key={s.key as string}>
                   <h2 className="text-xl font-bold text-ink-900">{s.label}</h2>
-                  <p className="mt-2 whitespace-pre-line text-slate-600">{project[s.key] as string}</p>
+                  <div
+                    className="prose prose-slate mt-2 max-w-none text-slate-600"
+                    dangerouslySetInnerHTML={{ __html: project[s.key] as string }}
+                  />
                 </div>
               )
           )}
