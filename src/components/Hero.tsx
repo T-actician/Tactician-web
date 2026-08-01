@@ -40,7 +40,7 @@ export default function Hero({ content }: { content: SiteContent }) {
             Electrical &amp; <span className="text-brand-600">Electronics</span>{" "}
             <span className="text-accent-500">Engineer</span>
           </h2>
-          <p className="mt-5 max-w-lg text-slate-600">{hero.description}</p>
+          <p className="mt-5 max-w-lg text-slate-800">{hero.description}</p>
 
           <div className="mt-7 flex flex-wrap gap-4">
             <a
@@ -60,7 +60,7 @@ export default function Hero({ content }: { content: SiteContent }) {
           </div>
 
           <div className="mt-8 flex items-center gap-4">
-            <span className="text-sm text-slate-500">Connect with me</span>
+            <span className="text-sm font-medium text-slate-700">Connect with me</span>
             {socials.map((s) => {
               const Icon = SOCIAL_ICONS[s.platform] ?? Mail;
               return (
