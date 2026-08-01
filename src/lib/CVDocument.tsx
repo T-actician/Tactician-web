@@ -1,4 +1,5 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import React from "react";
+import { Document, Page, Text, View, StyleSheet, Svg, Path, Circle } from "@react-pdf/renderer";
 import { SiteContent, Project } from "@/types/content";
 
 const NAVY = "#1c3f6e";
@@ -7,51 +8,56 @@ const MUTED = "#4b5563";
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 34,
-    paddingBottom: 34,
-    paddingHorizontal: 36,
-    fontSize: 9.5,
+    paddingTop: 36,
+    paddingBottom: 36,
+    paddingHorizontal: 40,
+    fontSize: 10,
     fontFamily: "Helvetica",
     color: INK,
-    lineHeight: 1.35,
+    lineHeight: 1.5,
   },
   name: {
-    fontSize: 26,
+    fontSize: 27,
     fontFamily: "Helvetica-Bold",
     color: "#111827",
     textAlign: "center",
-    letterSpacing: 1,
+    letterSpacing: 1.5,
   },
   role: {
-    fontSize: 12,
+    fontSize: 12.5,
     fontFamily: "Helvetica-Bold",
     color: NAVY,
     textAlign: "center",
-    letterSpacing: 2,
-    marginTop: 4,
+    letterSpacing: 2.5,
+    marginTop: 5,
   },
   contactRow: {
     flexDirection: "row",
     justifyContent: "center",
     flexWrap: "wrap",
-    marginTop: 10,
-    gap: 14,
+    marginTop: 12,
+    gap: 16,
   },
   contactItem: {
-    fontSize: 8.5,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  contactText: {
+    fontSize: 9,
     color: MUTED,
   },
   topDivider: {
     borderBottomWidth: 1,
     borderBottomColor: NAVY,
-    marginTop: 12,
-    marginBottom: 12,
+    marginTop: 14,
+    marginBottom: 14,
   },
   sectionHeaderWrap: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 4,
-    marginBottom: 8,
+    marginTop: 6,
+    marginBottom: 10,
   },
   sectionLine: {
     flex: 1,
@@ -59,107 +65,122 @@ const styles = StyleSheet.create({
     borderBottomColor: NAVY,
   },
   sectionTitle: {
-    fontSize: 10.5,
+    fontSize: 11,
     fontFamily: "Helvetica-Bold",
     color: NAVY,
     letterSpacing: 1,
-    marginHorizontal: 8,
+    marginHorizontal: 9,
+    textTransform: "uppercase",
+  },
+  subSectionHeaderWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  subSectionLine: {
+    width: 14,
+    borderBottomWidth: 0.75,
+    borderBottomColor: NAVY,
+  },
+  subSectionTitle: {
+    fontSize: 9.5,
+    fontFamily: "Helvetica-Bold",
+    color: NAVY,
+    letterSpacing: 0.75,
+    marginHorizontal: 6,
     textTransform: "uppercase",
   },
   summaryText: {
-    fontSize: 9.5,
+    fontSize: 10,
     color: "#374151",
     textAlign: "center",
-    lineHeight: 1.5,
+    lineHeight: 1.6,
+    paddingHorizontal: 6,
   },
   columns: {
     flexDirection: "row",
-    marginTop: 8,
+    marginTop: 10,
   },
   leftCol: {
-    width: "34%",
-    paddingRight: 14,
+    width: "35%",
+    paddingRight: 16,
   },
   vDivider: {
     width: 1,
     backgroundColor: "#d1d5db",
   },
   rightCol: {
-    width: "64%",
-    paddingLeft: 14,
+    width: "63%",
+    paddingLeft: 16,
   },
   subSection: {
-    marginBottom: 14,
-  },
-  subSectionTitleWrap: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 6,
-  },
-  subSectionTitle: {
-    fontSize: 9.5,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    letterSpacing: 0.5,
+    marginBottom: 18,
   },
   itemTitle: {
-    fontSize: 9.5,
+    fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: "#111827",
   },
   itemLink: {
-    fontSize: 8.5,
+    fontSize: 9,
     color: NAVY,
-    marginBottom: 2,
+    marginTop: 1,
   },
   itemMeta: {
-    fontSize: 8,
+    fontSize: 8.5,
     color: MUTED,
-    marginBottom: 2,
+    marginTop: 1,
   },
-  bulletList: {
+  eduBlock: {
     marginBottom: 10,
   },
   bulletLine: {
     flexDirection: "row",
-    marginBottom: 2,
+    marginBottom: 3,
   },
   bulletMark: {
-    fontSize: 8.5,
+    fontSize: 9,
     color: NAVY,
-    width: 8,
+    width: 9,
   },
   bulletText: {
-    fontSize: 8.5,
+    fontSize: 9,
     color: "#374151",
     flex: 1,
+    lineHeight: 1.5,
+  },
+  plainText: {
+    fontSize: 9,
+    color: "#374151",
+    lineHeight: 1.5,
   },
   subCategoryLabel: {
-    fontSize: 7.5,
+    fontSize: 8,
     fontFamily: "Helvetica-Bold",
     color: MUTED,
     letterSpacing: 0.5,
     textTransform: "uppercase",
-    marginBottom: 3,
-    marginTop: 6,
-  },
-  tagRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: 2,
+    marginBottom: 4,
+    marginTop: 8,
   },
   tagText: {
-    fontSize: 8.5,
+    fontSize: 9,
     color: "#374151",
-    marginBottom: 3,
+    marginBottom: 4,
   },
   expBlock: {
-    marginBottom: 12,
+    marginBottom: 14,
   },
   expHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+  },
+  expTitleRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    flexShrink: 1,
+    paddingRight: 8,
   },
   expDot: {
     width: 6,
@@ -170,21 +191,32 @@ const styles = StyleSheet.create({
     marginRight: 6,
     marginTop: 3,
   },
-  expTitleRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    flex: 1,
-  },
   expPeriod: {
-    fontSize: 8,
+    fontSize: 8.5,
     color: MUTED,
+    textAlign: "right",
+    width: 105,
   },
   expCompany: {
-    fontSize: 8.5,
+    fontSize: 9.5,
     fontFamily: "Helvetica-Bold",
     color: NAVY,
     marginLeft: 12,
-    marginBottom: 3,
+    marginBottom: 4,
+    marginTop: 1,
+  },
+  expBullets: {
+    marginLeft: 12,
+  },
+  projectBlock: {
+    marginBottom: 12,
+  },
+  projectSummary: {
+    fontSize: 9,
+    color: "#374151",
+    marginTop: 2,
+    marginBottom: 4,
+    lineHeight: 1.5,
   },
   threeCol: {
     flexDirection: "row",
@@ -195,19 +227,70 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   threeColTitle: {
-    fontSize: 8.5,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: NAVY,
-    marginBottom: 4,
-  },
-  footer: {
-    marginTop: 14,
-    textAlign: "center",
-    fontSize: 8.5,
-    fontStyle: "italic",
-    color: MUTED,
+    marginBottom: 5,
   },
 });
+
+// --- Minimal line-style icons (react-pdf renders real SVG, not DOM icon fonts) ---
+function IconPin() {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24">
+      <Path
+        d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"
+        stroke={NAVY}
+        strokeWidth={2}
+        fill="none"
+      />
+      <Circle cx={12} cy={10} r={2.4} fill={NAVY} />
+    </Svg>
+  );
+}
+function IconPhone() {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24">
+      <Path
+        d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z"
+        fill={NAVY}
+      />
+    </Svg>
+  );
+}
+function IconMail() {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24">
+      <Path
+        d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"
+        stroke={NAVY}
+        strokeWidth={2}
+        fill="none"
+      />
+      <Path d="M2 6l10 7 10-7" stroke={NAVY} strokeWidth={2} fill="none" />
+    </Svg>
+  );
+}
+function IconLinkedin() {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24">
+      <Path
+        d="M4.5 3.5A2.5 2.5 0 1 0 4.5 8.5 2.5 2.5 0 0 0 4.5 3.5zM2.5 10h4V21h-4V10zM9.5 10h3.8v1.5h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.6 4.78 6V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.7 0-1.96 1.33-1.96 2.7V21h-4V10z"
+        fill={NAVY}
+      />
+    </Svg>
+  );
+}
+function IconGithub() {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24">
+      <Path
+        d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.89-2.78.62-3.37-1.22-3.37-1.22-.46-1.2-1.11-1.52-1.11-1.52-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.9 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05a9.32 9.32 0 0 1 5 0c1.9-1.33 2.74-1.05 2.74-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"
+        fill={NAVY}
+      />
+    </Svg>
+  );
+}
 
 function splitToBullets(text: string): string[] {
   if (!text) return [];
@@ -232,16 +315,12 @@ function SectionHeader({ title }: { title: string }) {
   );
 }
 
-function TagList({ items }: { items: string[] }) {
-  if (!items || items.length === 0) return null;
+function SubSectionHeader({ title }: { title: string }) {
   return (
-    <View style={styles.tagRow}>
-      {items.map((item, i) => (
-        <Text key={i} style={styles.tagText}>
-          • {item}
-          {i < items.length - 1 ? "   " : ""}
-        </Text>
-      ))}
+    <View style={styles.subSectionHeaderWrap}>
+      <View style={styles.subSectionLine} />
+      <Text style={styles.subSectionTitle}>{title}</Text>
+      <View style={styles.subSectionLine} />
     </View>
   );
 }
@@ -252,13 +331,45 @@ function BulletBlock({ text }: { text: string }) {
   return (
     <View>
       {bullets.map((b, i) => (
-        <View key={i} style={styles.bulletLine}>
+        <View key={i} style={styles.bulletLine} wrap={false}>
           <Text style={styles.bulletMark}>•</Text>
           <Text style={styles.bulletText}>{b}</Text>
         </View>
       ))}
     </View>
   );
+}
+
+function TagBlock({ items }: { items: string[] }) {
+  if (items.length === 0) return null;
+  return (
+    <View>
+      {items.map((s, i) => (
+        <Text key={i} style={styles.tagText}>
+          • {s}
+        </Text>
+      ))}
+    </View>
+  );
+}
+
+// De-duplicates while preserving order, case-insensitive
+function mergeUnique(base: string[], extra: string[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const item of [...base, ...extra]) {
+    const key = item.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(item.trim());
+  }
+  return out;
+}
+
+function formatPeriod(period: string, current: boolean): string {
+  if (!period) return current ? "Present" : "";
+  if (current && !/present/i.test(period)) return `${period} - Present`;
+  return period;
 }
 
 export default function CVDocument({
@@ -268,18 +379,24 @@ export default function CVDocument({
   content: SiteContent;
   projects: Project[];
 }) {
-  const { hero, contact, experience, cv, socials } = content;
+  const { hero, contact, experience, cv, socials, skills, tools } = content;
   const fullName = `${hero.firstName} ${hero.lastName}`.trim();
 
   const linkedin = socials.find((s) => s.platform === "linkedin")?.url;
   const github = socials.find((s) => s.platform === "github")?.url;
 
-  const keywordSet = new Set<string>([
-    ...cv.engineeringSkills,
-    ...cv.softwareTools,
-    ...cv.softSkills,
-    ...(cv.keywords || []),
-  ]);
+  // Technical Skills default from the live site's Skills/Tools sections;
+  // anything added in the CV editor is appended on top, not a replacement.
+  const engineeringSkills = mergeUnique(
+    skills.map((s) => s.name),
+    cv.engineeringSkills
+  );
+  const softwareTools = mergeUnique(
+    tools.map((t) => t.name),
+    cv.softwareTools
+  );
+
+  const keywordSet = new Set<string>([...engineeringSkills, ...softwareTools, ...cv.softSkills, ...(cv.keywords || [])]);
 
   const cvProjects = projects.filter((p) => p.status === "published").slice(0, 3);
 
@@ -295,11 +412,36 @@ export default function CVDocument({
         <Text style={styles.name}>{fullName.toUpperCase()}</Text>
         <Text style={styles.role}>{hero.role.toUpperCase()}</Text>
         <View style={styles.contactRow}>
-          {contact.location && <Text style={styles.contactItem}>{contact.location}</Text>}
-          {contact.phone && <Text style={styles.contactItem}>{contact.phone}</Text>}
-          {contact.email && <Text style={styles.contactItem}>{contact.email}</Text>}
-          {linkedin && <Text style={styles.contactItem}>{linkedin.replace(/^https?:\/\//, "")}</Text>}
-          {github && <Text style={styles.contactItem}>{github.replace(/^https?:\/\//, "")}</Text>}
+          {contact.location && (
+            <View style={styles.contactItem}>
+              <IconPin />
+              <Text style={styles.contactText}>{contact.location}</Text>
+            </View>
+          )}
+          {contact.phone && (
+            <View style={styles.contactItem}>
+              <IconPhone />
+              <Text style={styles.contactText}>{contact.phone}</Text>
+            </View>
+          )}
+          {contact.email && (
+            <View style={styles.contactItem}>
+              <IconMail />
+              <Text style={styles.contactText}>{contact.email}</Text>
+            </View>
+          )}
+          {linkedin && (
+            <View style={styles.contactItem}>
+              <IconLinkedin />
+              <Text style={styles.contactText}>{linkedin.replace(/^https?:\/\//, "")}</Text>
+            </View>
+          )}
+          {github && (
+            <View style={styles.contactItem}>
+              <IconGithub />
+              <Text style={styles.contactText}>{github.replace(/^https?:\/\//, "")}</Text>
+            </View>
+          )}
         </View>
         <View style={styles.topDivider} />
 
@@ -311,14 +453,11 @@ export default function CVDocument({
         <View style={styles.columns}>
           {/* LEFT COLUMN */}
           <View style={styles.leftCol}>
-            {/* Education */}
             {cv.education.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>EDUCATION</Text>
-                </View>
+                <SubSectionHeader title="Education" />
                 {cv.education.map((edu) => (
-                  <View key={edu.id} style={{ marginBottom: 8 }}>
+                  <View key={edu.id} style={styles.eduBlock} wrap={false}>
                     <Text style={styles.itemTitle}>{edu.degree}</Text>
                     <Text style={styles.itemLink}>{edu.institution}</Text>
                     <Text style={styles.itemMeta}>{edu.period}</Text>
@@ -328,103 +467,64 @@ export default function CVDocument({
               </View>
             )}
 
-            {/* Technical Skills */}
-            {(cv.engineeringSkills.length > 0 || cv.softwareTools.length > 0) && (
+            {(engineeringSkills.length > 0 || softwareTools.length > 0) && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>TECHNICAL SKILLS</Text>
-                </View>
-                {cv.engineeringSkills.length > 0 && (
+                <SubSectionHeader title="Technical Skills" />
+                {engineeringSkills.length > 0 && (
                   <>
                     <Text style={styles.subCategoryLabel}>Engineering</Text>
-                    {cv.engineeringSkills.map((s, i) => (
-                      <Text key={i} style={styles.tagText}>
-                        • {s}
-                      </Text>
-                    ))}
+                    <TagBlock items={engineeringSkills} />
                   </>
                 )}
-                {cv.softwareTools.length > 0 && (
+                {softwareTools.length > 0 && (
                   <>
                     <Text style={styles.subCategoryLabel}>Software &amp; Tools</Text>
-                    {cv.softwareTools.map((s, i) => (
-                      <Text key={i} style={styles.tagText}>
-                        • {s}
-                      </Text>
-                    ))}
+                    <TagBlock items={softwareTools} />
                   </>
                 )}
               </View>
             )}
 
-            {/* Soft Skills */}
             {cv.softSkills.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>SOFT SKILLS</Text>
-                </View>
-                {cv.softSkills.map((s, i) => (
-                  <Text key={i} style={styles.tagText}>
-                    • {s}
-                  </Text>
-                ))}
+                <SubSectionHeader title="Soft Skills" />
+                <TagBlock items={cv.softSkills} />
               </View>
             )}
 
-            {/* Languages */}
             {cv.languages.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>LANGUAGES</Text>
-                </View>
-                {cv.languages.map((s, i) => (
-                  <Text key={i} style={styles.tagText}>
-                    • {s}
-                  </Text>
-                ))}
+                <SubSectionHeader title="Languages" />
+                <TagBlock items={cv.languages} />
               </View>
             )}
 
-            {/* Interests */}
             {cv.interests.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>INTERESTS</Text>
-                </View>
-                {cv.interests.map((s, i) => (
-                  <Text key={i} style={styles.tagText}>
-                    • {s}
-                  </Text>
-                ))}
+                <SubSectionHeader title="Interests" />
+                <TagBlock items={cv.interests} />
               </View>
             )}
           </View>
 
-          {/* Divider */}
           <View style={styles.vDivider} />
 
           {/* RIGHT COLUMN */}
           <View style={styles.rightCol}>
-            {/* Work Experience */}
             {experience.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>WORK EXPERIENCE</Text>
-                </View>
+                <SubSectionHeader title="Work Experience" />
                 {experience.map((exp) => (
-                  <View key={exp.id} style={styles.expBlock}>
+                  <View key={exp.id} style={styles.expBlock} wrap={false}>
                     <View style={styles.expHeaderRow}>
                       <View style={styles.expTitleRow}>
                         <View style={styles.expDot} />
                         <Text style={styles.itemTitle}>{exp.role}</Text>
                       </View>
-                      <Text style={styles.expPeriod}>
-                        {exp.period}
-                        {exp.current ? " - Present" : ""}
-                      </Text>
+                      <Text style={styles.expPeriod}>{formatPeriod(exp.period, exp.current)}</Text>
                     </View>
                     <Text style={styles.expCompany}>{exp.company}</Text>
-                    <View style={{ marginLeft: 12 }}>
+                    <View style={styles.expBullets}>
                       <BulletBlock text={exp.description} />
                     </View>
                   </View>
@@ -432,31 +532,25 @@ export default function CVDocument({
               </View>
             )}
 
-            {/* Projects */}
             {cvProjects.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>PROJECTS</Text>
-                </View>
+                <SubSectionHeader title="Projects" />
                 {cvProjects.map((p) => (
-                  <View key={p.id} style={{ marginBottom: 10 }}>
+                  <View key={p.id} style={styles.projectBlock} wrap={false}>
                     <Text style={styles.itemTitle}>{p.title}</Text>
-                    {p.summary && <Text style={[styles.bulletText, { marginBottom: 3 }]}>{p.summary}</Text>}
+                    {p.summary && <Text style={styles.projectSummary}>{p.summary}</Text>}
                     <BulletBlock text={p.results || p.implementation} />
                   </View>
                 ))}
               </View>
             )}
 
-            {/* Certifications */}
             {cv.certifications.length > 0 && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>CERTIFICATIONS</Text>
-                </View>
+                <SubSectionHeader title="Certifications" />
                 {cv.certifications.map((c) => (
-                  <View key={c.id} style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 3 }}>
-                    <Text style={styles.bulletText}>
+                  <View key={c.id} style={styles.expHeaderRow} wrap={false}>
+                    <Text style={[styles.plainText, { flexShrink: 1, paddingRight: 8 }]}>
                       {c.name} — {c.issuer}
                     </Text>
                     <Text style={styles.itemMeta}>{c.year}</Text>
@@ -465,41 +559,26 @@ export default function CVDocument({
               </View>
             )}
 
-            {/* Additional Information */}
             {(cv.interests.length > 0 || cv.strengths.length > 0 || cv.values.length > 0) && (
               <View style={styles.subSection}>
-                <View style={styles.subSectionTitleWrap}>
-                  <Text style={styles.subSectionTitle}>ADDITIONAL INFORMATION</Text>
-                </View>
+                <SubSectionHeader title="Additional Information" />
                 <View style={styles.threeCol}>
                   {cv.interests.length > 0 && (
                     <View style={styles.threeColItem}>
                       <Text style={styles.threeColTitle}>Activities &amp; Interests</Text>
-                      {cv.interests.map((s, i) => (
-                        <Text key={i} style={styles.tagText}>
-                          • {s}
-                        </Text>
-                      ))}
+                      <TagBlock items={cv.interests} />
                     </View>
                   )}
                   {cv.strengths.length > 0 && (
                     <View style={styles.threeColItem}>
                       <Text style={styles.threeColTitle}>Strengths</Text>
-                      {cv.strengths.map((s, i) => (
-                        <Text key={i} style={styles.tagText}>
-                          • {s}
-                        </Text>
-                      ))}
+                      <TagBlock items={cv.strengths} />
                     </View>
                   )}
                   {cv.values.length > 0 && (
                     <View style={styles.threeColItem}>
                       <Text style={styles.threeColTitle}>Values</Text>
-                      {cv.values.map((s, i) => (
-                        <Text key={i} style={styles.tagText}>
-                          • {s}
-                        </Text>
-                      ))}
+                      <TagBlock items={cv.values} />
                     </View>
                   )}
                 </View>
