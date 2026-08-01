@@ -1,14 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getJSON } from "@/lib/b2";
-import { CONTENT_KEY, PROJECTS_KEY, defaultContent } from "@/lib/defaults";
+import { CONTENT_KEY, PROJECTS_KEY, defaultContent, normalizeContent } from "@/lib/defaults";
 import { Project, SiteContent } from "@/types/content";
 import Navbar from "@/components/Navbar";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const content: SiteContent = await getJSON(CONTENT_KEY, defaultContent);
+  const content: SiteContent = normalizeContent(await getJSON(CONTENT_KEY, defaultContent));
   const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
   const published = projects.filter((p) => p.status === "published").sort((a, b) => a.order - b.order);
 

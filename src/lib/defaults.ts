@@ -69,3 +69,35 @@ export const defaultContent: SiteContent = {
       "Portfolio of Alex Kariuki — Electrical & Electronics Engineer specializing in power systems, control, and automation.",
   },
 };
+
+// Deep-merges stored content with the defaults so that adding new fields to
+// SiteContent later (e.g. `cv`) never crashes pages when older saved content
+// in B2 predates that field.
+export function normalizeContent(raw: Partial<SiteContent> | null | undefined): SiteContent {
+  const r = raw || {};
+  return {
+    ...defaultContent,
+    ...r,
+    hero: { ...defaultContent.hero, ...(r.hero || {}) },
+    socials: r.socials && r.socials.length > 0 ? r.socials : defaultContent.socials,
+    traits: r.traits && r.traits.length > 0 ? r.traits : defaultContent.traits,
+    about: {
+      ...defaultContent.about,
+      ...(r.about || {}),
+      stats: r.about?.stats && r.about.stats.length > 0 ? r.about.stats : defaultContent.about.stats,
+    },
+    skills: r.skills && r.skills.length > 0 ? r.skills : defaultContent.skills,
+    tools: r.tools && r.tools.length > 0 ? r.tools : defaultContent.tools,
+    experience: r.experience || [],
+    cv: {
+      ...defaultContent.cv,
+      ...(r.cv || {}),
+      education: r.cv?.education || [],
+      certifications: r.cv?.certifications || [],
+      keywords: r.cv?.keywords || [],
+    },
+    testimonials: r.testimonials || [],
+    contact: { ...defaultContent.contact, ...(r.contact || {}) },
+    seo: { ...defaultContent.seo, ...(r.seo || {}) },
+  };
+}

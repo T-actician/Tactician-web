@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { FileText } from "lucide-react";
 import { getJSON } from "@/lib/b2";
-import { CONTENT_KEY, PROJECTS_KEY, defaultContent } from "@/lib/defaults";
+import { CONTENT_KEY, PROJECTS_KEY, defaultContent, normalizeContent } from "@/lib/defaults";
 import { Project, SiteContent } from "@/types/content";
 import Navbar from "@/components/Navbar";
 import Gallery from "@/components/Gallery";
@@ -25,7 +25,7 @@ export default async function ProjectDetail({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const content: SiteContent = await getJSON(CONTENT_KEY, defaultContent);
+  const content: SiteContent = normalizeContent(await getJSON(CONTENT_KEY, defaultContent));
   const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
   const project = projects.find((p) => p.slug === slug && p.status === "published");
 

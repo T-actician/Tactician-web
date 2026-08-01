@@ -1,5 +1,5 @@
 import { getJSON } from "@/lib/b2";
-import { CONTENT_KEY, PROJECTS_KEY, defaultContent } from "@/lib/defaults";
+import { CONTENT_KEY, PROJECTS_KEY, defaultContent, normalizeContent } from "@/lib/defaults";
 import { Project, SiteContent } from "@/types/content";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -14,7 +14,7 @@ import Footer from "@/components/Footer";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const content: SiteContent = await getJSON(CONTENT_KEY, defaultContent);
+  const content: SiteContent = normalizeContent(await getJSON(CONTENT_KEY, defaultContent));
   const allProjects = await getJSON<Project[]>(PROJECTS_KEY, []);
   const published = allProjects
     .filter((p) => p.status === "published")
