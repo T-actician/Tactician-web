@@ -13,7 +13,6 @@ export const defaultContent: SiteContent = {
       "I design, build and optimize electrical systems that power industries and improve lives. Passionate about solving complex problems and delivering reliable, efficient and innovative solutions.",
     portraitKey: "",
     backgroundKey: "",
-    cvKey: "",
   },
   socials: [
     { platform: "linkedin", url: "" },
@@ -57,6 +56,12 @@ export const defaultContent: SiteContent = {
   ],
   testimonials: [],
   experience: [],
+  cv: {
+    summary: "",
+    education: [],
+    certifications: [],
+    keywords: [],
+  },
   contact: { email: "", phone: "", location: "" },
   seo: {
     title: "Alex Kariuki | Electrical & Electronics Engineer",

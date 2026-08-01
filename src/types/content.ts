@@ -29,6 +29,28 @@ export interface ExperienceItem {
   current: boolean;
 }
 
+export interface EducationItem {
+  id: string;
+  degree: string;
+  institution: string;
+  period: string;
+  description: string;
+}
+
+export interface CertificationItem {
+  id: string;
+  name: string;
+  issuer: string;
+  year: string;
+}
+
+export interface CVData {
+  summary: string;
+  education: EducationItem[];
+  certifications: CertificationItem[];
+  keywords: string[];
+}
+
 export interface Testimonial {
   id: string;
   name: string;
@@ -47,7 +69,6 @@ export interface SiteContent {
     description: string;
     portraitKey: string;
     backgroundKey: string;
-    cvKey: string;
   };
   socials: { platform: string; url: string }[];
   traits: TraitItem[];
@@ -61,6 +82,7 @@ export interface SiteContent {
   skills: SkillItem[];
   tools: ToolItem[];
   experience: ExperienceItem[];
+  cv: CVData;
   testimonials: Testimonial[];
   contact: {
     email: string;

@@ -89,15 +89,6 @@ export default function AdminContentPage() {
           </div>
         </div>
 
-        <div className="mt-4">
-          <p className="mb-2 text-sm font-semibold text-ink-900">CV (PDF)</p>
-          {content.hero.cvKey && <p className="mb-2 text-xs text-slate-500">{content.hero.cvKey.split("/").pop()}</p>}
-          <MediaUploader
-            folder="cv"
-            accept={{ "application/pdf": [] }}
-            onUploaded={(r) => setContent({ ...content, hero: { ...content.hero, cvKey: r.key } })}
-          />
-        </div>
       </section>
 
       {/* Socials */}
@@ -229,6 +220,393 @@ export default function AdminContentPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Experience */}
+      <section className="rounded-2xl bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-bold text-ink-900">Experience</h2>
+          <button
+            onClick={() =>
+              setContent({
+                ...content,
+                experience: [
+                  ...content.experience,
+                  {
+                    id: crypto.randomUUID(),
+                    role: "New Role",
+                    company: "Company",
+                    period: "2024 - Present",
+                    description: "",
+                    current: false,
+                  },
+                ],
+              })
+            }
+            className="flex items-center gap-1 text-sm font-semibold text-brand-600"
+          >
+            <Plus size={14} /> Add
+          </button>
+        </div>
+        <div className="flex flex-col gap-4">
+          {content.experience.map((exp, i) => (
+            <div key={exp.id} className="rounded-xl bg-slate-50 p-4">
+              <div className="mb-2 grid grid-cols-2 gap-3">
+                <input
+                  value={exp.role}
+                  placeholder="Role"
+                  onChange={(e) => {
+                    const experience = [...content.experience];
+                    experience[i] = { ...experience[i], role: e.target.value };
+                    setContent({ ...content, experience });
+                  }}
+                  className="rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <input
+                  value={exp.company}
+                  placeholder="Company"
+                  onChange={(e) => {
+                    const experience = [...content.experience];
+                    experience[i] = { ...experience[i], company: e.target.value };
+                    setContent({ ...content, experience });
+                  }}
+                  className="rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+              </div>
+              <div className="mb-2 flex items-center gap-3">
+                <input
+                  value={exp.period}
+                  placeholder="Period e.g. 2022 - 2024"
+                  onChange={(e) => {
+                    const experience = [...content.experience];
+                    experience[i] = { ...experience[i], period: e.target.value };
+                    setContent({ ...content, experience });
+                  }}
+                  className="flex-1 rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <label className="flex items-center gap-2 text-xs font-medium text-ink-900">
+                  <input
+                    type="checkbox"
+                    checked={exp.current}
+                    onChange={(e) => {
+                      const experience = [...content.experience];
+                      experience[i] = { ...experience[i], current: e.target.checked };
+                      setContent({ ...content, experience });
+                    }}
+                  />
+                  Current
+                </label>
+              </div>
+              <textarea
+                rows={2}
+                value={exp.description}
+                placeholder="Description"
+                onChange={(e) => {
+                  const experience = [...content.experience];
+                  experience[i] = { ...experience[i], description: e.target.value };
+                  setContent({ ...content, experience });
+                }}
+                className="mb-2 w-full rounded border border-slate-200 px-3 py-2 text-sm"
+              />
+              <button
+                onClick={() => setContent({ ...content, experience: content.experience.filter((_, x) => x !== i) })}
+                className="flex items-center gap-1 text-xs font-semibold text-red-500"
+              >
+                <Trash2 size={13} /> Remove
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="rounded-2xl bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-bold text-ink-900">Testimonials</h2>
+          <button
+            onClick={() =>
+              setContent({
+                ...content,
+                testimonials: [
+                  ...content.testimonials,
+                  { id: crypto.randomUUID(), name: "Name", role: "Role", company: "Company", quote: "" },
+                ],
+              })
+            }
+            className="flex items-center gap-1 text-sm font-semibold text-brand-600"
+          >
+            <Plus size={14} /> Add
+          </button>
+        </div>
+        <div className="flex flex-col gap-4">
+          {content.testimonials.map((t, i) => (
+            <div key={t.id} className="flex gap-4 rounded-xl bg-slate-50 p-4">
+              <div className="w-24 shrink-0">
+                {t.avatarKey && (
+                  <div className="relative mb-2 h-16 w-16 overflow-hidden rounded-full">
+                    <Image src={`/api/media/${t.avatarKey}`} alt="" fill className="object-cover" />
+                  </div>
+                )}
+                <MediaUploader
+                  folder="testimonials"
+                  accept={{ "image/*": [] }}
+                  label="Photo"
+                  onUploaded={(r) => {
+                    const testimonials = [...content.testimonials];
+                    testimonials[i] = { ...testimonials[i], avatarKey: r.key };
+                    setContent({ ...content, testimonials });
+                  }}
+                />
+              </div>
+              <div className="flex-1">
+                <div className="mb-2 grid grid-cols-3 gap-2">
+                  <input
+                    value={t.name}
+                    placeholder="Name"
+                    onChange={(e) => {
+                      const testimonials = [...content.testimonials];
+                      testimonials[i] = { ...testimonials[i], name: e.target.value };
+                      setContent({ ...content, testimonials });
+                    }}
+                    className="rounded border border-slate-200 px-3 py-2 text-sm"
+                  />
+                  <input
+                    value={t.role}
+                    placeholder="Role"
+                    onChange={(e) => {
+                      const testimonials = [...content.testimonials];
+                      testimonials[i] = { ...testimonials[i], role: e.target.value };
+                      setContent({ ...content, testimonials });
+                    }}
+                    className="rounded border border-slate-200 px-3 py-2 text-sm"
+                  />
+                  <input
+                    value={t.company}
+                    placeholder="Company"
+                    onChange={(e) => {
+                      const testimonials = [...content.testimonials];
+                      testimonials[i] = { ...testimonials[i], company: e.target.value };
+                      setContent({ ...content, testimonials });
+                    }}
+                    className="rounded border border-slate-200 px-3 py-2 text-sm"
+                  />
+                </div>
+                <textarea
+                  rows={2}
+                  value={t.quote}
+                  placeholder="Quote"
+                  onChange={(e) => {
+                    const testimonials = [...content.testimonials];
+                    testimonials[i] = { ...testimonials[i], quote: e.target.value };
+                    setContent({ ...content, testimonials });
+                  }}
+                  className="mb-2 w-full rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <button
+                  onClick={() =>
+                    setContent({ ...content, testimonials: content.testimonials.filter((_, x) => x !== i) })
+                  }
+                  className="flex items-center gap-1 text-xs font-semibold text-red-500"
+                >
+                  <Trash2 size={13} /> Remove
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CV Content (used only for the auto-generated downloadable CV) */}
+      <section className="rounded-2xl bg-white p-6 shadow-sm">
+        <div className="mb-1 flex items-center justify-between">
+          <h2 className="font-bold text-ink-900">CV Content</h2>
+          <span className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+            Not shown on site — used to generate the downloadable CV
+          </span>
+        </div>
+        <p className="mb-4 text-sm text-slate-500">
+          The CV is generated automatically from your Experience, Skills, and Tools above, plus what you add here.
+        </p>
+
+        <Field
+          label="Professional Summary (leave blank to reuse your About description)"
+          textarea
+          value={content.cv.summary}
+          onChange={(v) => setContent({ ...content, cv: { ...content.cv, summary: v } })}
+        />
+
+        <Field
+          label="Additional ATS Keywords (comma separated — boosts keyword matching on job portals)"
+          value={content.cv.keywords.join(", ")}
+          onChange={(v) =>
+            setContent({
+              ...content,
+              cv: { ...content.cv, keywords: v.split(",").map((k) => k.trim()).filter(Boolean) },
+            })
+          }
+        />
+
+        {/* Education */}
+        <div className="mt-6">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">Education</h3>
+            <button
+              onClick={() =>
+                setContent({
+                  ...content,
+                  cv: {
+                    ...content.cv,
+                    education: [
+                      ...content.cv.education,
+                      { id: crypto.randomUUID(), degree: "Degree / Qualification", institution: "Institution", period: "2018 - 2022", description: "" },
+                    ],
+                  },
+                })
+              }
+              className="flex items-center gap-1 text-sm font-semibold text-brand-600"
+            >
+              <Plus size={14} /> Add
+            </button>
+          </div>
+          <div className="flex flex-col gap-4">
+            {content.cv.education.map((edu, i) => (
+              <div key={edu.id} className="rounded-xl bg-slate-50 p-4">
+                <div className="mb-2 grid grid-cols-2 gap-3">
+                  <input
+                    value={edu.degree}
+                    placeholder="Degree / Qualification"
+                    onChange={(e) => {
+                      const education = [...content.cv.education];
+                      education[i] = { ...education[i], degree: e.target.value };
+                      setContent({ ...content, cv: { ...content.cv, education } });
+                    }}
+                    className="rounded border border-slate-200 px-3 py-2 text-sm"
+                  />
+                  <input
+                    value={edu.institution}
+                    placeholder="Institution"
+                    onChange={(e) => {
+                      const education = [...content.cv.education];
+                      education[i] = { ...education[i], institution: e.target.value };
+                      setContent({ ...content, cv: { ...content.cv, education } });
+                    }}
+                    className="rounded border border-slate-200 px-3 py-2 text-sm"
+                  />
+                </div>
+                <input
+                  value={edu.period}
+                  placeholder="Period e.g. 2018 - 2022"
+                  onChange={(e) => {
+                    const education = [...content.cv.education];
+                    education[i] = { ...education[i], period: e.target.value };
+                    setContent({ ...content, cv: { ...content.cv, education } });
+                  }}
+                  className="mb-2 w-full rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <textarea
+                  rows={2}
+                  value={edu.description}
+                  placeholder="Notable coursework, honors, etc. (optional)"
+                  onChange={(e) => {
+                    const education = [...content.cv.education];
+                    education[i] = { ...education[i], description: e.target.value };
+                    setContent({ ...content, cv: { ...content.cv, education } });
+                  }}
+                  className="mb-2 w-full rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <button
+                  onClick={() =>
+                    setContent({
+                      ...content,
+                      cv: { ...content.cv, education: content.cv.education.filter((_, x) => x !== i) },
+                    })
+                  }
+                  className="flex items-center gap-1 text-xs font-semibold text-red-500"
+                >
+                  <Trash2 size={13} /> Remove
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Certifications */}
+        <div className="mt-6">
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">Certifications</h3>
+            <button
+              onClick={() =>
+                setContent({
+                  ...content,
+                  cv: {
+                    ...content.cv,
+                    certifications: [
+                      ...content.cv.certifications,
+                      { id: crypto.randomUUID(), name: "Certification Name", issuer: "Issuing Body", year: "2024" },
+                    ],
+                  },
+                })
+              }
+              className="flex items-center gap-1 text-sm font-semibold text-brand-600"
+            >
+              <Plus size={14} /> Add
+            </button>
+          </div>
+          <div className="flex flex-col gap-3">
+            {content.cv.certifications.map((cert, i) => (
+              <div key={cert.id} className="flex items-center gap-2 rounded-xl bg-slate-50 p-3">
+                <input
+                  value={cert.name}
+                  placeholder="Certification Name"
+                  onChange={(e) => {
+                    const certifications = [...content.cv.certifications];
+                    certifications[i] = { ...certifications[i], name: e.target.value };
+                    setContent({ ...content, cv: { ...content.cv, certifications } });
+                  }}
+                  className="flex-1 rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <input
+                  value={cert.issuer}
+                  placeholder="Issuer"
+                  onChange={(e) => {
+                    const certifications = [...content.cv.certifications];
+                    certifications[i] = { ...certifications[i], issuer: e.target.value };
+                    setContent({ ...content, cv: { ...content.cv, certifications } });
+                  }}
+                  className="flex-1 rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <input
+                  value={cert.year}
+                  placeholder="Year"
+                  onChange={(e) => {
+                    const certifications = [...content.cv.certifications];
+                    certifications[i] = { ...certifications[i], year: e.target.value };
+                    setContent({ ...content, cv: { ...content.cv, certifications } });
+                  }}
+                  className="w-20 rounded border border-slate-200 px-3 py-2 text-sm"
+                />
+                <button
+                  onClick={() =>
+                    setContent({
+                      ...content,
+                      cv: { ...content.cv, certifications: content.cv.certifications.filter((_, x) => x !== i) },
+                    })
+                  }
+                >
+                  <Trash2 size={16} className="text-red-400" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <a
+          href="/api/cv"
+          target="_blank"
+          className="mt-6 inline-block rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700"
+        >
+          Preview Generated CV
+        </a>
       </section>
 
       {/* Contact */}

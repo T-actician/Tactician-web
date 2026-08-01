@@ -76,14 +76,14 @@ export default function Hero({ content }: { content: SiteContent }) {
             >
               View My Work <ArrowRight size={18} />
             </a>
-            {hero.cvKey && (
-              <a
-                href={`/api/media/${hero.cvKey}`}
-                className="glass inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-brand-700 shadow-sm transition hover:-translate-y-0.5"
-              >
-                Download CV <Download size={18} />
-              </a>
-            )}
+            <a
+              href="/api/cv"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-brand-700 shadow-sm transition hover:-translate-y-0.5"
+            >
+              Download CV <Download size={18} />
+            </a>
           </div>
 
           <div className="mt-8 flex items-center gap-4">
