@@ -16,6 +16,11 @@ export const b2 = new S3Client({
     accessKeyId: process.env.B2_KEY_ID!,
     secretAccessKey: process.env.B2_APPLICATION_KEY!,
   },
+  // Backblaze B2's S3-compatible API doesn't support the AWS SDK v3 default
+  // request/response checksum headers (x-amz-checksum-*). Without disabling
+  // these, presigned PUT URLs fail CORS preflight in the browser.
+  requestChecksumCalculation: "WHEN_REQUIRED",
+  responseChecksumValidation: "WHEN_REQUIRED",
 });
 
 const BUCKET = process.env.B2_BUCKET_NAME!;
