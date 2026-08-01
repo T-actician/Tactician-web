@@ -20,7 +20,13 @@ export default function Hero({ content }: { content: SiteContent }) {
       {bgUrl && (
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Image src={bgUrl} alt="" fill priority className="object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/15 via-white/5 to-[var(--background)]" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(6,66,72,0.06) 0%, rgba(6,66,72,0.10) 45%, rgba(6,66,72,0.22) 80%, var(--background) 100%)",
+            }}
+          />
         </div>
       )}
 
