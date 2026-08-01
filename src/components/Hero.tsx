@@ -17,7 +17,7 @@ function highlightKeywords(text: string, words: string[]) {
   const parts = text.split(pattern);
   return parts.map((part, i) =>
     words.some((w) => w.toLowerCase() === part.toLowerCase()) ? (
-      <span key={i} className="text-gradient-gold font-extrabold">
+      <span key={i} className="font-extrabold text-brand-800">
         {part}
       </span>
     ) : (
@@ -63,9 +63,11 @@ export default function Hero({ content }: { content: SiteContent }) {
             Electrical &amp; <span className="text-brand-600">Electronics</span>{" "}
             <span className="text-accent-500">Engineer</span>
           </h2>
-          <p className="mt-5 max-w-lg text-lg font-bold text-ink-900">
-            {highlightKeywords(hero.description, ["efficient", "reliable", "innovative", "improve lives"])}
-          </p>
+          <div className="glass mt-5 inline-block max-w-lg rounded-2xl px-5 py-4 shadow-sm">
+            <p className="text-lg font-bold text-black">
+              {highlightKeywords(hero.description, ["efficient", "reliable", "innovative", "improve lives"])}
+            </p>
+          </div>
 
           <div className="mt-7 flex flex-wrap gap-4">
             <a
@@ -85,7 +87,9 @@ export default function Hero({ content }: { content: SiteContent }) {
           </div>
 
           <div className="mt-8 flex items-center gap-4">
-            <span className="text-gradient-gold text-sm font-bold">Connect with me</span>
+            <span className="glass rounded-full px-3 py-1.5 text-sm font-bold text-brand-800 shadow-sm">
+              Connect with me
+            </span>
             {socials.map((s) => {
               const Icon = SOCIAL_ICONS[s.platform] ?? Mail;
               return (
