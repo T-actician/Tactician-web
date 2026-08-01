@@ -10,12 +10,14 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [errorStack, setErrorStack] = useState("");
 
   useEffect(() => {
     fetch("/api/admin/projects")
       .then(async (r) => {
         if (!r.ok) {
           const data = await r.json().catch(() => ({ error: `Request failed (${r.status})` }));
+          setErrorStack(data.stack || "");
           throw new Error(data.error || `Request failed (${r.status})`);
         }
         return r.json();
@@ -63,7 +65,10 @@ export default function AdminProjectsPage() {
   if (error)
     return (
       <div className="rounded-xl bg-red-50 p-4 text-sm text-red-600">
-        {error}. If this mentions &quot;Unauthorized&quot; or times out, check that your Supabase project isn&apos;t paused, then refresh.
+        <p className="mb-2 font-semibold">{error}</p>
+        {errorStack && (
+          <pre className="max-w-full overflow-x-auto whitespace-pre-wrap text-xs text-red-500">{errorStack}</pre>
+        )}
       </div>
     );
 
