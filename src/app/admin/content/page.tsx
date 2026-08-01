@@ -436,7 +436,7 @@ export default function AdminContentPage() {
         />
 
         <Field
-          label="Additional ATS Keywords (comma separated — boosts keyword matching on job portals)"
+          label="Additional ATS Keywords (comma separated — boosts keyword matching on job portals, not shown visually)"
           value={content.cv.keywords.join(", ")}
           onChange={(v) =>
             setContent({
@@ -445,6 +445,79 @@ export default function AdminContentPage() {
             })
           }
         />
+
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          <Field
+            label="Technical Skills — Engineering (comma separated)"
+            value={content.cv.engineeringSkills.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, engineeringSkills: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+          <Field
+            label="Technical Skills — Software & Tools (comma separated)"
+            value={content.cv.softwareTools.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, softwareTools: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+          <Field
+            label="Soft Skills (comma separated)"
+            value={content.cv.softSkills.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, softSkills: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+          <Field
+            label="Languages (comma separated, e.g. English – Proficient)"
+            value={content.cv.languages.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, languages: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+          <Field
+            label="Interests (comma separated)"
+            value={content.cv.interests.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, interests: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+          <Field
+            label="Strengths (comma separated)"
+            value={content.cv.strengths.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, strengths: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+          <Field
+            label="Values (comma separated)"
+            value={content.cv.values.join(", ")}
+            onChange={(v) =>
+              setContent({
+                ...content,
+                cv: { ...content.cv, values: v.split(",").map((k) => k.trim()).filter(Boolean) },
+              })
+            }
+          />
+        </div>
 
         {/* Education */}
         <div className="mt-6">

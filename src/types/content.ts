@@ -49,6 +49,13 @@ export interface CVData {
   education: EducationItem[];
   certifications: CertificationItem[];
   keywords: string[];
+  engineeringSkills: string[];
+  softwareTools: string[];
+  softSkills: string[];
+  languages: string[];
+  interests: string[];
+  strengths: string[];
+  values: string[];
 }
 
 export interface Testimonial {
