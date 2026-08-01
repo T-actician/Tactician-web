@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Download, Link2, Code2, Mail, Phone, Zap, Target, Shield, Lightbulb } from "lucide-react";
+import { ArrowRight, Download, Mail, Phone, Zap, Target, Shield, Lightbulb } from "lucide-react";
+import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { SiteContent } from "@/types/content";
 
 const ICONS: Record<string, any> = { zap: Zap, target: Target, shield: Shield, lightbulb: Lightbulb };
-const SOCIAL_ICONS: Record<string, any> = { linkedin: Link2, github: Code2, email: Mail, phone: Phone };
+const SOCIAL_ICONS: Record<string, any> = { linkedin: FaLinkedinIn, github: FaGithub, email: Mail, phone: Phone };
 
 export default function Hero({ content }: { content: SiteContent }) {
   const { hero, traits, socials } = content;
@@ -14,14 +15,14 @@ export default function Hero({ content }: { content: SiteContent }) {
   const bgUrl = hero.backgroundKey ? `/api/media/${hero.backgroundKey}` : "";
 
   return (
-    <section id="home" className="relative overflow-hidden pt-14 pb-10">
+    <section id="home" className="relative overflow-hidden pt-14 pb-14">
+      {/* Full-bleed background photo - kept vivid, only faded at the very bottom edge */}
       {bgUrl && (
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <Image src={bgUrl} alt="" fill priority className="object-cover opacity-40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/60 to-[var(--background)]" />
+          <Image src={bgUrl} alt="" fill priority className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/15 via-white/5 to-[var(--background)]" />
         </div>
       )}
-      <div className="circuit-pattern absolute inset-0 -z-10 opacity-40" />
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-[1.1fr_0.8fr_0.55fr] lg:items-center">
         {/* Left copy */}
@@ -68,7 +69,7 @@ export default function Hero({ content }: { content: SiteContent }) {
                   href={s.url || "#"}
                   className="glass flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:text-brand-600"
                 >
-                  <Icon size={16} />
+                  <Icon size={14} />
                 </a>
               );
             })}
@@ -80,16 +81,17 @@ export default function Hero({ content }: { content: SiteContent }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="relative mx-auto aspect-[4/5] w-full max-w-sm"
+          className="relative mx-auto aspect-[3/4] w-full max-w-md"
         >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-200/60 to-accent-400/40 blur-2xl" />
+          <div className="absolute inset-0 scale-110 rounded-full bg-gradient-to-br from-brand-200/50 to-accent-400/30 blur-3xl" />
           {portraitUrl ? (
             <Image
               src={portraitUrl}
               alt="Portrait"
               fill
               priority
-              className="relative rounded-3xl object-cover object-top"
+              sizes="(max-width: 768px) 90vw, 420px"
+              className="relative object-contain object-bottom"
             />
           ) : (
             <div className="relative flex h-full items-center justify-center rounded-3xl border border-dashed border-brand-300 text-sm text-slate-400">
