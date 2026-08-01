@@ -3,49 +3,55 @@ import { getJSON, putJSON } from "@/lib/b2";
 import { PROJECTS_KEY } from "@/lib/defaults";
 import { Project } from "@/types/content";
 import { requireAdmin } from "@/lib/auth-guard";
-import { randomUUID } from "crypto";
 
-export async function GET() {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const user = await requireAdmin();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
   const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
-  return NextResponse.json(projects.sort((a, b) => a.order - b.order));
+  const project = projects.find((p) => p.id === id);
+  if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json(project);
 }
 
-export async function POST(req: NextRequest) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const user = await requireAdmin();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const { id } = await params;
   const body = await req.json();
   const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
+  const index = projects.findIndex((p) => p.id === id);
+  if (index === -1) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const now = new Date().toISOString();
-  const newProject: Project = {
-    id: randomUUID(),
-    slug: body.slug || body.title?.toLowerCase().replace(/[^a-z0-9]+/g, "-") || randomUUID(),
-    title: body.title || "Untitled Project",
-    category: body.category || "",
-    summary: body.summary || "",
-    technologies: body.technologies || [],
-    coverImageKey: body.coverImageKey || "",
-    featured: body.featured ?? false,
-    order: projects.length,
-    status: body.status || "draft",
-    problemStatement: body.problemStatement || "",
-    objectives: body.objectives || "",
-    designProcess: body.designProcess || "",
-    implementation: body.implementation || "",
-    results: body.results || "",
-    challenges: body.challenges || "",
-    lessonsLearned: body.lessonsLearned || "",
-    gallery: body.gallery || [],
-    documents: body.documents || [],
-    videos: body.videos || [],
-    createdAt: now,
-    updatedAt: now,
+  projects[index] = {
+    ...projects[index],
+    ...body,
+    id: projects[index].id,
+    updatedAt: new Date().toISOString(),
   };
 
-  projects.push(newProject);
   await putJSON(PROJECTS_KEY, projects);
-  return NextResponse.json(newProject, { status: 201 });
+  return NextResponse.json(projects[index]);
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const user = await requireAdmin();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
+  const projects = await getJSON<Project[]>(PROJECTS_KEY, []);
+  const filtered = projects.filter((p) => p.id !== id);
+  await putJSON(PROJECTS_KEY, filtered);
+  return NextResponse.json({ success: true });
 }
