@@ -10,7 +10,7 @@ export default function FeaturedProjects({ projects }: { projects: Project[] }) 
   const featured = projects.filter((p) => p.featured).slice(0, 4);
 
   return (
-    <section id="projects" className="mx-auto max-w-7xl px-6 py-4">
+    <section id="projects" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-4">
       <div className="mb-6 flex items-center justify-between">
         <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Featured Projects</p>
         <Link href="/projects" className="flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline">

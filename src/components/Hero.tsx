@@ -32,7 +32,7 @@ export default function Hero({ content }: { content: SiteContent }) {
   const bgUrl = hero.backgroundKey ? `/api/media/${hero.backgroundKey}` : "";
 
   return (
-    <section id="home" className="relative overflow-hidden pt-14 pb-14">
+    <section id="home" className="scroll-mt-16 relative overflow-hidden pt-14 pb-14">
       {/* Full-bleed background photo - kept vivid, only faded at the very bottom edge */}
       {bgUrl && (
         <div className="pointer-events-none absolute inset-0 -z-10">
@@ -71,7 +71,7 @@ export default function Hero({ content }: { content: SiteContent }) {
 
           <div className="mt-7 flex flex-wrap gap-4">
             <a
-              href="#projects"
+              href="/#projects"
               className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-3 font-semibold text-white shadow-lg shadow-brand-600/25 transition hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-xl"
             >
               View My Work <ArrowRight size={18} />

@@ -11,7 +11,7 @@ export default function About({ content }: { content: SiteContent }) {
   const { about } = content;
 
   return (
-    <section id="about" className="mx-auto max-w-7xl px-6 py-4">
+    <section id="about" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-4">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

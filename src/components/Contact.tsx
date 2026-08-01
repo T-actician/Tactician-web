@@ -26,7 +26,7 @@ export default function Contact({ content }: { content: SiteContent }) {
   }
 
   return (
-    <section id="contact" className="mx-auto max-w-7xl px-6 py-14">
+    <section id="contact" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-14">
       <div className="glass grid grid-cols-1 gap-8 rounded-3xl p-8 shadow-xl lg:grid-cols-2">
         <div>
           <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Contact</p>

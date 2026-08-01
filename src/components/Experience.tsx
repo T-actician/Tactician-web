@@ -8,7 +8,7 @@ export default function Experience({ items }: { items: ExperienceItem[] }) {
   if (!items || items.length === 0) return null;
 
   return (
-    <section id="experience" className="mx-auto max-w-7xl px-6 py-14">
+    <section id="experience" className="scroll-mt-24 mx-auto max-w-7xl px-6 py-14">
       <p className="mb-8 text-xs font-bold uppercase tracking-wider text-brand-600">Experience</p>
 
       <div className="relative flex flex-col gap-8 border-l-2 border-brand-100 pl-8">

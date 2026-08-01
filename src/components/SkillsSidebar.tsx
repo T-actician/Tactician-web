@@ -7,7 +7,7 @@ export default function SkillsSidebar({ content }: { content: SiteContent }) {
   const { skills, tools } = content;
 
   return (
-    <aside id="skills" className="glass flex flex-col gap-6 rounded-3xl p-6 shadow-xl shadow-brand-900/5">
+    <aside id="skills" className="scroll-mt-24 glass flex flex-col gap-6 rounded-3xl p-6 shadow-xl shadow-brand-900/5">
       <div>
         <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Core Skills</p>
         <div className="mt-4 flex flex-col gap-4">
