@@ -4,6 +4,20 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { UploadCloud, Loader2 } from "lucide-react";
 
+async function safeErrorMessage(res: Response): Promise<string> {
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    try {
+      const data = await res.json();
+      return data.error || `Upload failed (${res.status})`;
+    } catch {
+      return `Upload failed (${res.status})`;
+    }
+  }
+  if (res.status === 413) return "File too large for direct upload.";
+  return `Upload failed (${res.status})`;
+}
+
 export default function MediaUploader({
   folder,
   accept,
@@ -25,18 +39,46 @@ export default function MediaUploader({
       setUploading(true);
       setError("");
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("folder", folder);
-        const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
-        if (!res.ok) {
+        const isVideo = file.type.startsWith("video/");
+        const isPdf = file.type === "application/pdf";
+        const useDirectUpload = isVideo || isPdf;
+
+        if (useDirectUpload) {
+          // Videos and PDFs go straight to B2 via a presigned URL — bypasses
+          // the server's request size limit, which is too small for large files.
+          const presignRes = await fetch("/api/admin/presign-upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ folder, contentType: file.type }),
+          });
+          if (!presignRes.ok) {
+            const msg = await safeErrorMessage(presignRes);
+            throw new Error(msg);
+          }
+          const { uploadUrl, key, type } = await presignRes.json();
+
+          const putRes = await fetch(uploadUrl, {
+            method: "PUT",
+            headers: { "Content-Type": file.type },
+            body: file,
+          });
+          if (!putRes.ok) throw new Error("Video upload to storage failed");
+
+          onUploaded({ key, type });
+        } else {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("folder", folder);
+          const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
+          if (!res.ok) {
+            const msg = await safeErrorMessage(res);
+            throw new Error(msg);
+          }
           const data = await res.json();
-          throw new Error(data.error || "Upload failed");
+          onUploaded(data);
         }
-        const data = await res.json();
-        onUploaded(data);
       } catch (err: any) {
-        setError(err.message);
+        setError(err.message || "Upload failed");
       } finally {
         setUploading(false);
       }

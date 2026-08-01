@@ -62,6 +62,14 @@ export async function getSignedGetUrl(key: string, expiresIn = 3600) {
   return getSignedUrl(b2, new GetObjectCommand({ Bucket: BUCKET, Key: key }), { expiresIn });
 }
 
+export async function getSignedPutUrl(key: string, contentType: string, expiresIn = 3600) {
+  return getSignedUrl(
+    b2,
+    new PutObjectCommand({ Bucket: BUCKET, Key: key, ContentType: contentType }),
+    { expiresIn }
+  );
+}
+
 // ---- JSON content helpers ----
 export async function getJSON<T>(key: string, fallback: T): Promise<T> {
   const text = await getObjectText(key);

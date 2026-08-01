@@ -7,12 +7,11 @@ import sharp from "sharp";
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
-const MAX_IMAGE_BYTES = 25 * 1024 * 1024; // 25MB
-const MAX_FILE_BYTES = 500 * 1024 * 1024; // 500MB (video/pdf)
-
+// Images only — videos and PDFs use the presigned direct-to-B2 upload flow
+// (/api/admin/presign-upload) because Vercel serverless functions cap
+// request bodies at ~4.5MB, which is too small for those file types.
+const MAX_IMAGE_BYTES = 4 * 1024 * 1024; // 4MB, safely under Vercel's limit
 const ALLOWED_IMAGE = ["image/jpeg", "image/png", "image/webp"];
-const ALLOWED_DOC = ["application/pdf"];
-const ALLOWED_VIDEO = ["video/mp4", "video/webm", "video/quicktime"];
 
 export async function POST(req: NextRequest) {
   const user = await requireAdmin();
@@ -24,45 +23,27 @@ export async function POST(req: NextRequest) {
 
   if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
 
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-  const isImage = ALLOWED_IMAGE.includes(file.type);
-  const isDoc = ALLOWED_DOC.includes(file.type);
-  const isVideo = ALLOWED_VIDEO.includes(file.type);
-
-  if (!isImage && !isDoc && !isVideo) {
+  if (!ALLOWED_IMAGE.includes(file.type)) {
     return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
   }
 
-  const sizeLimit = isImage ? MAX_IMAGE_BYTES : MAX_FILE_BYTES;
-  if (buffer.length > sizeLimit) {
-    return NextResponse.json({ error: "File too large" }, { status: 400 });
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  if (buffer.length > MAX_IMAGE_BYTES) {
+    return NextResponse.json(
+      { error: "Image too large — please use a file under 4MB" },
+      { status: 400 }
+    );
   }
 
-  const id = randomUUID();
+  // Optimize: resize max width 1920, convert to webp, quality 82
+  const optimized = await sharp(buffer)
+    .resize({ width: 1920, withoutEnlargement: true })
+    .webp({ quality: 82 })
+    .toBuffer();
 
-  if (isImage) {
-    // Optimize: resize max width 1920, convert to webp, quality 82
-    const optimized = await sharp(buffer)
-      .resize({ width: 1920, withoutEnlargement: true })
-      .webp({ quality: 82 })
-      .toBuffer();
-
-    const key = `${folder}/${id}.webp`;
-    await putObject(key, optimized, "image/webp");
-    return NextResponse.json({ key, type: "image" });
-  }
-
-  if (isDoc) {
-    const ext = "pdf";
-    const key = `${folder}/${id}.${ext}`;
-    await putObject(key, buffer, file.type);
-    return NextResponse.json({ key, type: "pdf" });
-  }
-
-  // video
-  const ext = file.type === "video/webm" ? "webm" : "mp4";
-  const key = `${folder}/${id}.${ext}`;
-  await putObject(key, buffer, file.type);
-  return NextResponse.json({ key, type: "video" });
+  const key = `${folder}/${randomUUID()}.webp`;
+  await putObject(key, optimized, "image/webp");
+  return NextResponse.json({ key, type: "image" });
 }
