@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 import { getJSON, putJSON } from "@/lib/b2";
 
 const SUBMISSIONS_KEY = "content/contact-submissions.json";
@@ -31,21 +32,22 @@ export async function POST(req: NextRequest) {
   });
   await putJSON(SUBMISSIONS_KEY, submissions);
 
-  // Optional email notification via Resend, if configured
-  if (process.env.RESEND_API_KEY && process.env.CONTACT_NOTIFY_EMAIL) {
+  // Optional email notification via Gmail SMTP, if configured
+  if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD && process.env.CONTACT_NOTIFY_EMAIL) {
     try {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json",
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
         },
-        body: JSON.stringify({
-          from: "Portfolio Contact <onboarding@resend.dev>",
-          to: process.env.CONTACT_NOTIFY_EMAIL,
-          subject: `New portfolio message from ${name}`,
-          text: `From: ${name} (${email})\n\n${message}`,
-        }),
+      });
+      await transporter.sendMail({
+        from: `Portfolio Contact <${process.env.GMAIL_USER}>`,
+        to: process.env.CONTACT_NOTIFY_EMAIL,
+        replyTo: email,
+        subject: `New portfolio message from ${name}`,
+        text: `From: ${name} (${email})\n\n${message}`,
       });
     } catch {
       // Email failure shouldn't block the submission
