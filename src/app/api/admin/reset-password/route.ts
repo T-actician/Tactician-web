@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import { getJSON, putJSON } from "@/lib/b2";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -36,6 +37,26 @@ export async function POST(req: NextRequest) {
 
   if (!matchedUser) {
     return NextResponse.json({ error: "Account no longer exists" }, { status: 400 });
+  }
+
+  // Reject if the new password is the same as the current one. We check this
+  // by attempting a real sign-in with the candidate password on a throwaway
+  // client — a successful login means it matches the current password.
+  const probeClient = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+  const { data: probeResult } = await probeClient.auth.signInWithPassword({
+    email: entry.email,
+    password,
+  });
+  if (probeResult?.user) {
+    await probeClient.auth.signOut();
+    return NextResponse.json(
+      { error: "New password must be different from your current password." },
+      { status: 400 }
+    );
   }
 
   const { error } = await admin.auth.admin.updateUserById(matchedUser.id, { password });

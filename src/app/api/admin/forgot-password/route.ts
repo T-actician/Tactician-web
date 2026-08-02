@@ -16,11 +16,9 @@ interface ResetToken {
   used: boolean;
 }
 
-// Always respond with a generic success message, whether or not the email
-// exists, so this endpoint can't be used to enumerate admin accounts.
-const GENERIC_RESPONSE = NextResponse.json({
+const SENT_RESPONSE = NextResponse.json({
   success: true,
-  message: "If that email is registered, a reset link has been sent.",
+  message: "A reset link has been sent to your email.",
 });
 
 export async function POST(req: NextRequest) {
@@ -35,9 +33,9 @@ export async function POST(req: NextRequest) {
   const { data: userList } = await admin.auth.admin.listUsers({ perPage: 1000 });
   const matchedUser = userList?.users.find((u) => u.email?.toLowerCase() === normalizedEmail);
 
-  // No matching admin account — don't reveal that, just return generic success.
+  // No matching admin account.
   if (!matchedUser) {
-    return GENERIC_RESPONSE;
+    return NextResponse.json({ error: "This email is not registered as an admin." }, { status: 404 });
   }
 
   const tokens = await getJSON<ResetToken[]>(TOKENS_KEY, []);
@@ -48,7 +46,10 @@ export async function POST(req: NextRequest) {
     (t) => t.email === normalizedEmail && !t.used && now - t.createdAt < COOLDOWN_MS
   );
   if (recentForEmail) {
-    return GENERIC_RESPONSE;
+    return NextResponse.json(
+      { error: "A reset link was already sent recently. Please check your email or wait a minute." },
+      { status: 429 }
+    );
   }
 
   // Drop expired/used tokens to keep the store small.
@@ -87,5 +88,5 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  return GENERIC_RESPONSE;
+  return SENT_RESPONSE;
 }

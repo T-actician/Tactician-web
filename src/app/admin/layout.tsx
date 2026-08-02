@@ -15,7 +15,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
 
-  if (pathname === "/admin/login") return <>{children}</>;
+  const AUTH_PAGES = ["/admin/login", "/admin/forgot-password", "/admin/reset-password"];
+  if (AUTH_PAGES.includes(pathname)) return <>{children}</>;
 
   async function handleLogout() {
     const supabase = supabaseBrowser();
