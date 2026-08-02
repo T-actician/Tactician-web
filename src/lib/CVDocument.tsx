@@ -551,6 +551,24 @@ export default function CVDocument({
                 <TagBlock items={cv.interests} />
               </View>
             )}
+
+            {(cv.strengths.length > 0 || cv.values.length > 0) && (
+              <View style={styles.subSection} wrap={false}>
+                <SubSectionHeader title="Additional Information" />
+                {cv.strengths.length > 0 && (
+                  <>
+                    <Text style={styles.subCategoryLabel}>Strengths</Text>
+                    <TagBlock items={cv.strengths} />
+                  </>
+                )}
+                {cv.values.length > 0 && (
+                  <>
+                    <Text style={styles.subCategoryLabel}>Values</Text>
+                    <TagBlock items={cv.values} />
+                  </>
+                )}
+              </View>
+            )}
           </View>
 
           <View style={styles.vDivider} />
@@ -595,31 +613,6 @@ export default function CVDocument({
               </View>
             )}
 
-            {(cv.interests.length > 0 || cv.strengths.length > 0 || cv.values.length > 0) && (
-              <View style={styles.subSection} wrap={false}>
-                <SubSectionHeader title="Additional Information" />
-                <View style={styles.threeCol}>
-                  {cv.interests.length > 0 && (
-                    <View style={styles.threeColItem}>
-                      <Text style={styles.threeColTitle}>Activities &amp; Interests</Text>
-                      <TagBlock items={cv.interests} />
-                    </View>
-                  )}
-                  {cv.strengths.length > 0 && (
-                    <View style={styles.threeColItem}>
-                      <Text style={styles.threeColTitle}>Strengths</Text>
-                      <TagBlock items={cv.strengths} />
-                    </View>
-                  )}
-                  {cv.values.length > 0 && (
-                    <View style={styles.threeColItem}>
-                      <Text style={styles.threeColTitle}>Values</Text>
-                      <TagBlock items={cv.values} />
-                    </View>
-                  )}
-                </View>
-              </View>
-            )}
           </View>
         </View>
       </Page>
