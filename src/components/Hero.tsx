@@ -78,8 +78,6 @@ export default function Hero({ content }: { content: SiteContent }) {
             </a>
             <a
               href="/api/cv"
-              target="_blank"
-              rel="noopener noreferrer"
               className="glass inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-brand-700 shadow-sm transition hover:-translate-y-0.5"
             >
               Download CV <Download size={18} />

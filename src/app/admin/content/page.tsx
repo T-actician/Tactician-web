@@ -634,7 +634,7 @@ export default function AdminContentPage() {
         </div>
 
         <a
-          href="/api/cv"
+          href="/api/cv?preview=1"
           target="_blank"
           className="mt-6 inline-block rounded-full bg-brand-600 px-5 py-2 text-sm font-semibold text-white hover:bg-brand-700"
         >
