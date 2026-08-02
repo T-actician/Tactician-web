@@ -69,7 +69,7 @@ function PhoneButton({ number }: { number: string }) {
         <Phone size={14} />
       </button>
       {open && (
-        <div className="absolute left-1/2 top-12 z-20 w-52 -translate-x-1/2 rounded-2xl bg-ink-900 p-4 text-center shadow-xl">
+        <div className="absolute right-0 top-12 z-20 w-52 rounded-2xl bg-ink-900 p-4 text-center shadow-xl">
           <p className="text-xs text-white/60">Call me at</p>
           <p className="mt-1 text-base font-bold text-white">{number}</p>
           <button
@@ -98,10 +98,10 @@ export default function Hero({ content }: { content: SiteContent }) {
   const bgUrl = hero.backgroundKey ? `/api/media/${hero.backgroundKey}` : "";
 
   return (
-    <section id="home" className="scroll-mt-16 relative overflow-hidden pt-14 pb-14">
+    <section id="home" className="scroll-mt-16 relative pt-14 pb-14">
       {/* Full-bleed background photo - kept vivid, only faded at the very bottom edge */}
       {bgUrl && (
-        <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           <Image src={bgUrl} alt="" fill priority className="object-cover" />
           <div
             className="absolute inset-0"

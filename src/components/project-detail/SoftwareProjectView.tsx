@@ -61,8 +61,8 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
                 {demoHref && (
                   <a
                     href={demoHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={project.demoUrl ? "_blank" : undefined}
+                    rel={project.demoUrl ? "noopener noreferrer" : undefined}
                     className="flex items-center gap-2 rounded-lg border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
                   >
                     <Play size={15} /> Watch Demo
@@ -132,9 +132,18 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
             </div>
           )}
 
-          {project.gallery.length > 0 && (
+          {(project.gallery.length > 0 || project.videos.length > 0) && (
             <div>
               <h2 className="mb-3 text-xl font-bold text-ink-900">Screenshots</h2>
+              {project.videos.length > 0 && (
+                <div className="mb-4 flex flex-col gap-4">
+                  {project.videos.map((v) => (
+                    <video key={v.key} controls className="w-full rounded-xl shadow-sm" src={`/api/media/${v.key}`}>
+                      Your browser does not support the video tag.
+                    </video>
+                  ))}
+                </div>
+              )}
               <Gallery items={project.gallery} />
             </div>
           )}
