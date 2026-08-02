@@ -69,9 +69,9 @@ function PhoneButton({ number }: { number: string }) {
         <Phone size={14} />
       </button>
       {open && (
-        <div className="glass absolute left-1/2 top-12 z-20 w-52 -translate-x-1/2 rounded-2xl p-4 text-center shadow-xl">
-          <p className="text-xs text-slate-500">Call me at</p>
-          <p className="mt-1 text-base font-bold text-ink-900">{number}</p>
+        <div className="absolute left-1/2 top-12 z-20 w-52 -translate-x-1/2 rounded-2xl bg-ink-900 p-4 text-center shadow-xl">
+          <p className="text-xs text-white/60">Call me at</p>
+          <p className="mt-1 text-base font-bold text-white">{number}</p>
           <button
             onClick={handleCopy}
             className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"

@@ -22,6 +22,8 @@ function TechGroup({ title, items }: { title: string; items?: string[] }) {
 
 export default function SoftwareProjectView({ project }: { project: Project }) {
   const initial = project.title.trim()[0]?.toUpperCase() || "P";
+  const uploadedVideo = project.videos?.[0];
+  const demoHref = project.demoUrl || (uploadedVideo ? `/api/media/${uploadedVideo.key}` : "");
   const hasTechStack =
     (project.techStackFrontend?.length || 0) +
       (project.techStackBackend?.length || 0) +
@@ -56,9 +58,9 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
               {project.summary && <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60">{project.summary}</p>}
 
               <div className="mt-7 flex flex-wrap gap-3">
-                {project.demoUrl && (
+                {demoHref && (
                   <a
-                    href={project.demoUrl}
+                    href={demoHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 rounded-lg border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
