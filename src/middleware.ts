@@ -44,15 +44,20 @@ export async function middleware(request: NextRequest) {
   if (isAdminArea && !isPublicAdminPage && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    redirectResponse.headers.set("Cache-Control", "no-store, must-revalidate");
+    return redirectResponse;
   }
 
   if (path === "/admin/login" && user) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin";
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    redirectResponse.headers.set("Cache-Control", "no-store, must-revalidate");
+    return redirectResponse;
   }
 
+  response.headers.set("Cache-Control", "no-store, must-revalidate");
   return response;
 }
 
