@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   contactText: {
     fontSize: 9,
     color: MUTED,
+    lineHeight: 1,
   },
   topDivider: {
     borderBottomWidth: 1,
@@ -370,6 +371,34 @@ function formatPeriod(period: string, current: boolean): string {
   return period;
 }
 
+function ExperienceEntry({ exp }: { exp: SiteContent["experience"][number] }) {
+  return (
+    <View style={styles.expBlock} wrap={false}>
+      <View style={styles.expHeaderRow}>
+        <View style={styles.expTitleRow}>
+          <View style={styles.expDot} />
+          <Text style={styles.itemTitle}>{exp.role}</Text>
+        </View>
+        <Text style={styles.expPeriod}>{formatPeriod(exp.period, exp.current)}</Text>
+      </View>
+      <Text style={styles.expCompany}>{exp.company}</Text>
+      <View style={styles.expBullets}>
+        <BulletBlock text={exp.description} />
+      </View>
+    </View>
+  );
+}
+
+function ProjectEntry({ project }: { project: Project }) {
+  return (
+    <View style={styles.projectBlock} wrap={false}>
+      <Text style={styles.itemTitle}>{project.title}</Text>
+      {project.summary && <Text style={styles.projectSummary}>{project.summary}</Text>}
+      <BulletBlock text={project.results || project.implementation} />
+    </View>
+  );
+}
+
 export default function CVDocument({
   content,
   projects,
@@ -462,8 +491,18 @@ export default function CVDocument({
           <View style={styles.leftCol}>
             {cv.education.length > 0 && (
               <View style={styles.subSection}>
-                <SubSectionHeader title="Education" />
-                {cv.education.map((edu) => (
+                <View wrap={false}>
+                  <SubSectionHeader title="Education" />
+                  <View style={styles.eduBlock}>
+                    <Text style={styles.itemTitle}>{cv.education[0].degree}</Text>
+                    <Text style={styles.itemLink}>{cv.education[0].institution}</Text>
+                    <Text style={styles.itemMeta}>{cv.education[0].period}</Text>
+                    {cv.education[0].description && (
+                      <Text style={styles.itemMeta}>{cv.education[0].description}</Text>
+                    )}
+                  </View>
+                </View>
+                {cv.education.slice(1).map((edu) => (
                   <View key={edu.id} style={styles.eduBlock} wrap={false}>
                     <Text style={styles.itemTitle}>{edu.degree}</Text>
                     <Text style={styles.itemLink}>{edu.institution}</Text>
@@ -475,7 +514,7 @@ export default function CVDocument({
             )}
 
             {(engineeringSkills.length > 0 || softwareTools.length > 0) && (
-              <View style={styles.subSection}>
+              <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Technical Skills" />
                 {engineeringSkills.length > 0 && (
                   <>
@@ -493,21 +532,21 @@ export default function CVDocument({
             )}
 
             {cv.softSkills.length > 0 && (
-              <View style={styles.subSection}>
+              <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Soft Skills" />
                 <TagBlock items={cv.softSkills} />
               </View>
             )}
 
             {cv.languages.length > 0 && (
-              <View style={styles.subSection}>
+              <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Languages" />
                 <TagBlock items={cv.languages} />
               </View>
             )}
 
             {cv.interests.length > 0 && (
-              <View style={styles.subSection}>
+              <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Interests" />
                 <TagBlock items={cv.interests} />
               </View>
@@ -520,43 +559,33 @@ export default function CVDocument({
           <View style={styles.rightCol}>
             {experience.length > 0 && (
               <View style={styles.subSection}>
-                <SubSectionHeader title="Work Experience" />
-                {experience.map((exp) => (
-                  <View key={exp.id} style={styles.expBlock} wrap={false}>
-                    <View style={styles.expHeaderRow}>
-                      <View style={styles.expTitleRow}>
-                        <View style={styles.expDot} />
-                        <Text style={styles.itemTitle}>{exp.role}</Text>
-                      </View>
-                      <Text style={styles.expPeriod}>{formatPeriod(exp.period, exp.current)}</Text>
-                    </View>
-                    <Text style={styles.expCompany}>{exp.company}</Text>
-                    <View style={styles.expBullets}>
-                      <BulletBlock text={exp.description} />
-                    </View>
-                  </View>
+                <View wrap={false}>
+                  <SubSectionHeader title="Work Experience" />
+                  <ExperienceEntry exp={experience[0]} />
+                </View>
+                {experience.slice(1).map((exp) => (
+                  <ExperienceEntry key={exp.id} exp={exp} />
                 ))}
               </View>
             )}
 
             {cvProjects.length > 0 && (
               <View style={styles.subSection}>
-                <SubSectionHeader title="Projects" />
-                {cvProjects.map((p) => (
-                  <View key={p.id} style={styles.projectBlock} wrap={false}>
-                    <Text style={styles.itemTitle}>{p.title}</Text>
-                    {p.summary && <Text style={styles.projectSummary}>{p.summary}</Text>}
-                    <BulletBlock text={p.results || p.implementation} />
-                  </View>
+                <View wrap={false}>
+                  <SubSectionHeader title="Projects" />
+                  <ProjectEntry project={cvProjects[0]} />
+                </View>
+                {cvProjects.slice(1).map((p) => (
+                  <ProjectEntry key={p.id} project={p} />
                 ))}
               </View>
             )}
 
             {cv.certifications.length > 0 && (
-              <View style={styles.subSection}>
+              <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Certifications" />
                 {cv.certifications.map((c) => (
-                  <View key={c.id} style={styles.expHeaderRow} wrap={false}>
+                  <View key={c.id} style={styles.expHeaderRow}>
                     <Text style={[styles.plainText, { flexShrink: 1, paddingRight: 8 }]}>
                       {c.name} — {c.issuer}
                     </Text>
@@ -567,7 +596,7 @@ export default function CVDocument({
             )}
 
             {(cv.interests.length > 0 || cv.strengths.length > 0 || cv.values.length > 0) && (
-              <View style={styles.subSection}>
+              <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Additional Information" />
                 <View style={styles.threeCol}>
                   {cv.interests.length > 0 && (
