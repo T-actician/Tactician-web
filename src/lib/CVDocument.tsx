@@ -17,19 +17,11 @@ const styles = StyleSheet.create({
     lineHeight: 1.5,
   },
   name: {
-    fontSize: 27,
-    fontFamily: "Helvetica-Bold",
+    fontSize: 28,
+    fontFamily: "Times-Bold",
     color: "#111827",
     textAlign: "center",
     letterSpacing: 1.5,
-  },
-  role: {
-    fontSize: 12.5,
-    fontFamily: "Helvetica-Bold",
-    color: NAVY,
-    textAlign: "center",
-    letterSpacing: 2.5,
-    marginTop: 5,
   },
   contactRow: {
     flexDirection: "row",
@@ -41,7 +33,13 @@ const styles = StyleSheet.create({
   contactItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
+  },
+  contactIconBox: {
+    width: 11,
+    height: 11,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 4,
   },
   contactText: {
     fontSize: 9,
@@ -307,7 +305,7 @@ function splitToBullets(text: string): string[] {
 
 function SectionHeader({ title }: { title: string }) {
   return (
-    <View style={styles.sectionHeaderWrap}>
+    <View style={styles.sectionHeaderWrap} minPresenceAhead={50}>
       <View style={styles.sectionLine} />
       <Text style={styles.sectionTitle}>{title}</Text>
       <View style={styles.sectionLine} />
@@ -317,7 +315,7 @@ function SectionHeader({ title }: { title: string }) {
 
 function SubSectionHeader({ title }: { title: string }) {
   return (
-    <View style={styles.subSectionHeaderWrap}>
+    <View style={styles.subSectionHeaderWrap} minPresenceAhead={50}>
       <View style={styles.subSectionLine} />
       <Text style={styles.subSectionTitle}>{title}</Text>
       <View style={styles.subSectionLine} />
@@ -410,35 +408,44 @@ export default function CVDocument({
       <Page size="A4" style={styles.page}>
         {/* Header */}
         <Text style={styles.name}>{fullName.toUpperCase()}</Text>
-        <Text style={styles.role}>{hero.role.toUpperCase()}</Text>
         <View style={styles.contactRow}>
           {contact.location && (
             <View style={styles.contactItem}>
-              <IconPin />
+              <View style={styles.contactIconBox}>
+                <IconPin />
+              </View>
               <Text style={styles.contactText}>{contact.location}</Text>
             </View>
           )}
           {contact.phone && (
             <View style={styles.contactItem}>
-              <IconPhone />
+              <View style={styles.contactIconBox}>
+                <IconPhone />
+              </View>
               <Text style={styles.contactText}>{contact.phone}</Text>
             </View>
           )}
           {contact.email && (
             <View style={styles.contactItem}>
-              <IconMail />
+              <View style={styles.contactIconBox}>
+                <IconMail />
+              </View>
               <Text style={styles.contactText}>{contact.email}</Text>
             </View>
           )}
           {linkedin && (
             <View style={styles.contactItem}>
-              <IconLinkedin />
+              <View style={styles.contactIconBox}>
+                <IconLinkedin />
+              </View>
               <Text style={styles.contactText}>{linkedin.replace(/^https?:\/\//, "")}</Text>
             </View>
           )}
           {github && (
             <View style={styles.contactItem}>
-              <IconGithub />
+              <View style={styles.contactIconBox}>
+                <IconGithub />
+              </View>
               <Text style={styles.contactText}>{github.replace(/^https?:\/\//, "")}</Text>
             </View>
           )}

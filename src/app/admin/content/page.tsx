@@ -115,10 +115,10 @@ export default function AdminContentPage() {
         <h2 className="mb-4 font-bold text-ink-900">About</h2>
         <Field label="Title" value={content.about.title} onChange={(v) => setContent({ ...content, about: { ...content.about, title: v } })} />
         <Field label="Description" textarea value={content.about.description} onChange={(v) => setContent({ ...content, about: { ...content.about, description: v } })} />
-        <Field
-          label="Tags (comma separated)"
-          value={content.about.tags.join(", ")}
-          onChange={(v) => setContent({ ...content, about: { ...content.about, tags: v.split(",").map((t) => t.trim()).filter(Boolean) } })}
+        <CommaField
+          label="Tags"
+          value={content.about.tags}
+          onChange={(tags) => setContent({ ...content, about: { ...content.about, tags } })}
         />
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
           {content.about.stats.map((stat, i) => (
@@ -435,87 +435,47 @@ export default function AdminContentPage() {
           onChange={(v) => setContent({ ...content, cv: { ...content.cv, summary: v } })}
         />
 
-        <Field
-          label="Additional ATS Keywords (comma separated — boosts keyword matching on job portals, not shown visually)"
-          value={content.cv.keywords.join(", ")}
-          onChange={(v) =>
-            setContent({
-              ...content,
-              cv: { ...content.cv, keywords: v.split(",").map((k) => k.trim()).filter(Boolean) },
-            })
-          }
+        <CommaField
+          label="Additional ATS Keywords (boosts keyword matching on job portals, not shown visually)"
+          value={content.cv.keywords}
+          onChange={(keywords) => setContent({ ...content, cv: { ...content.cv, keywords } })}
         />
 
         <div className="mt-4 grid grid-cols-2 gap-4">
-          <Field
-            label="Technical Skills — Engineering (comma separated)"
-            value={content.cv.engineeringSkills.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, engineeringSkills: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Technical Skills — Engineering"
+            value={content.cv.engineeringSkills}
+            onChange={(engineeringSkills) => setContent({ ...content, cv: { ...content.cv, engineeringSkills } })}
           />
-          <Field
-            label="Technical Skills — Software & Tools (comma separated)"
-            value={content.cv.softwareTools.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, softwareTools: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Technical Skills — Software & Tools"
+            value={content.cv.softwareTools}
+            onChange={(softwareTools) => setContent({ ...content, cv: { ...content.cv, softwareTools } })}
           />
-          <Field
-            label="Soft Skills (comma separated)"
-            value={content.cv.softSkills.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, softSkills: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Soft Skills"
+            value={content.cv.softSkills}
+            onChange={(softSkills) => setContent({ ...content, cv: { ...content.cv, softSkills } })}
           />
-          <Field
-            label="Languages (comma separated, e.g. English – Proficient)"
-            value={content.cv.languages.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, languages: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Languages (e.g. English – Proficient)"
+            value={content.cv.languages}
+            onChange={(languages) => setContent({ ...content, cv: { ...content.cv, languages } })}
           />
-          <Field
-            label="Interests (comma separated)"
-            value={content.cv.interests.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, interests: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Interests"
+            value={content.cv.interests}
+            onChange={(interests) => setContent({ ...content, cv: { ...content.cv, interests } })}
           />
-          <Field
-            label="Strengths (comma separated)"
-            value={content.cv.strengths.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, strengths: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Strengths"
+            value={content.cv.strengths}
+            onChange={(strengths) => setContent({ ...content, cv: { ...content.cv, strengths } })}
           />
-          <Field
-            label="Values (comma separated)"
-            value={content.cv.values.join(", ")}
-            onChange={(v) =>
-              setContent({
-                ...content,
-                cv: { ...content.cv, values: v.split(",").map((k) => k.trim()).filter(Boolean) },
-              })
-            }
+          <CommaField
+            label="Values"
+            value={content.cv.values}
+            onChange={(values) => setContent({ ...content, cv: { ...content.cv, values } })}
           />
         </div>
 
@@ -691,6 +651,39 @@ export default function AdminContentPage() {
           <Field label="Location" value={content.contact.location} onChange={(v) => setContent({ ...content, contact: { ...content.contact, location: v } })} />
         </div>
       </section>
+    </div>
+  );
+}
+
+// For comma-separated list fields (skills, tags, keywords, etc). Keeps its
+// own raw text while typing and only converts to a trimmed string[] on blur —
+// splitting/trimming on every keystroke was eating the space bar, since a
+// trailing space gets trimmed away the instant it's typed.
+function CommaField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string[];
+  onChange: (items: string[]) => void;
+}) {
+  const [text, setText] = useState(value.join(", "));
+
+  useEffect(() => {
+    setText(value.join(", "));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value.join(",")]);
+
+  return (
+    <div className="mb-3">
+      <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</label>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onBlur={() => onChange(text.split(",").map((k) => k.trim()).filter(Boolean))}
+        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-500"
+      />
     </div>
   );
 }
