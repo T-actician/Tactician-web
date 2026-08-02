@@ -113,6 +113,16 @@ export interface ProjectMediaItem {
   caption?: string;
 }
 
+export interface ProjectMetric {
+  label: string;
+  value: string;
+}
+
+export interface ChallengeSolution {
+  challenge: string;
+  solution: string;
+}
+
 export interface Project {
   id: string;
   slug: string;
@@ -124,6 +134,7 @@ export interface Project {
   featured: boolean;
   order: number;
   status: "draft" | "published";
+  projectType: "technical" | "software";
   problemStatement: string;
   objectives: string;
   designProcess: string;
@@ -136,4 +147,19 @@ export interface Project {
   videos: ProjectMediaItem[];
   createdAt: string;
   updatedAt: string;
+  // --- Software / web project only ---
+  tagline?: string;
+  liveUrl?: string;
+  demoUrl?: string;
+  role?: string;
+  timeline?: string;
+  duration?: string;
+  teamSize?: string;
+  keyFeatures?: string[];
+  techStackFrontend?: string[];
+  techStackBackend?: string[];
+  techStackDatabase?: string[];
+  techStackTools?: string[];
+  metrics?: ProjectMetric[];
+  challengesSolutions?: ChallengeSolution[];
 }

@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Download, Mail, Phone, Zap, Target, Shield, Lightbulb } from "lucide-react";
+import { ArrowRight, Download, Mail, Phone, Copy, Check, Zap, Target, Shield, Lightbulb } from "lucide-react";
 import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { SiteContent } from "@/types/content";
 
@@ -23,6 +24,71 @@ function highlightKeywords(text: string, words: string[]) {
     ) : (
       <span key={i}>{part}</span>
     )
+  );
+}
+
+function PhoneButton({ number }: { number: string }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleClick() {
+    const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+    if (isMobile) {
+      window.location.href = `tel:${number.replace(/[^\d+]/g, "")}`;
+    } else {
+      setOpen((o) => !o);
+    }
+  }
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(number);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // clipboard API unavailable — silently ignore
+    }
+  }
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={handleClick}
+        className="glass flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:text-brand-600"
+        aria-label="Phone number"
+      >
+        <Phone size={14} />
+      </button>
+      {open && (
+        <div className="glass absolute left-1/2 top-12 z-20 w-52 -translate-x-1/2 rounded-2xl p-4 text-center shadow-xl">
+          <p className="text-xs text-slate-500">Call me at</p>
+          <p className="mt-1 text-base font-bold text-ink-900">{number}</p>
+          <button
+            onClick={handleCopy}
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+          >
+            {copied ? (
+              <>
+                <Check size={14} /> Copied
+              </>
+            ) : (
+              <>
+                <Copy size={14} /> Copy Number
+              </>
+            )}
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -89,11 +155,18 @@ export default function Hero({ content }: { content: SiteContent }) {
               Connect with me
             </span>
             {socials.map((s) => {
+              if (s.platform === "phone") {
+                if (!s.url) return null;
+                return <PhoneButton key="phone" number={s.url} />;
+              }
               const Icon = SOCIAL_ICONS[s.platform] ?? Mail;
+              const href = s.platform === "email" ? `mailto:${s.url}` : s.url || "#";
               return (
                 <a
                   key={s.platform}
-                  href={s.url || "#"}
+                  href={href}
+                  target={s.platform === "email" ? undefined : "_blank"}
+                  rel={s.platform === "email" ? undefined : "noopener noreferrer"}
                   className="glass flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:text-brand-600"
                 >
                   <Icon size={14} />
