@@ -23,9 +23,18 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const result = await supabase.auth.getUser();
+    user = result.data.user;
+  } catch (err) {
+    console.error("middleware auth check failed:", err);
+    user = null;
+    // Session cookie is corrupted/invalidated (e.g. after a password reset) — clear it.
+    request.cookies.getAll().forEach((c) => {
+      if (c.name.startsWith("sb-")) response.cookies.delete(c.name);
+    });
+  }
 
   const path = request.nextUrl.pathname;
   const isPublicAdminPage =
