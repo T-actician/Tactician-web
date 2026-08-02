@@ -28,16 +28,17 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isLoginPage = path === "/admin/login";
+  const isPublicAdminPage =
+    path === "/admin/login" || path === "/admin/forgot-password" || path === "/admin/reset-password";
   const isAdminArea = path.startsWith("/admin");
 
-  if (isAdminArea && !isLoginPage && !user) {
+  if (isAdminArea && !isPublicAdminPage && !user) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin/login";
     return NextResponse.redirect(url);
   }
 
-  if (isLoginPage && user) {
+  if (path === "/admin/login" && user) {
     const url = request.nextUrl.clone();
     url.pathname = "/admin";
     return NextResponse.redirect(url);
