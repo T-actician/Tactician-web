@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 import { Lock } from "lucide-react";
 
@@ -64,6 +65,10 @@ export default function AdminLogin() {
         >
           {loading ? "Signing in..." : "Sign In"}
         </button>
+
+        <Link href="/admin/forgot-password" className="mt-4 block text-center text-xs text-white/50 hover:text-white/80">
+          Forgot password?
+        </Link>
       </form>
     </div>
   );
