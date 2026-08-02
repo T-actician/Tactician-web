@@ -160,7 +160,15 @@ export default function Hero({ content }: { content: SiteContent }) {
                 return <PhoneButton key="phone" number={s.url} />;
               }
               const Icon = SOCIAL_ICONS[s.platform] ?? Mail;
-              const href = s.platform === "email" ? `mailto:${s.url}` : s.url || "#";
+              const rawUrl = s.url || "";
+              const href =
+                s.platform === "email"
+                  ? `mailto:${rawUrl}`
+                  : rawUrl
+                  ? /^https?:\/\//i.test(rawUrl)
+                    ? rawUrl
+                    : `https://${rawUrl}`
+                  : "#";
               return (
                 <a
                   key={s.platform}
