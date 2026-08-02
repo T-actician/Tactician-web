@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { Testimonial } from "@/types/content";
@@ -22,9 +23,16 @@ export default function Testimonials({ items }: { items: Testimonial[] }) {
           >
             <Quote className="mb-3 text-brand-300" size={22} />
             <p className="text-sm text-slate-600">{t.quote}</p>
-            <div className="mt-4">
-              <p className="text-sm font-bold text-ink-900">{t.name}</p>
-              <p className="text-xs text-slate-500">{t.role} · {t.company}</p>
+            <div className="mt-4 flex items-center gap-3">
+              {t.avatarKey && (
+                <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                  <Image src={`/api/media/${t.avatarKey}`} alt={t.name} fill className="object-cover" />
+                </div>
+              )}
+              <div>
+                <p className="text-sm font-bold text-ink-900">{t.name}</p>
+                <p className="text-xs text-slate-500">{t.role} · {t.company}</p>
+              </div>
             </div>
           </motion.div>
         ))}
