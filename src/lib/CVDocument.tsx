@@ -513,21 +513,10 @@ export default function CVDocument({
               </View>
             )}
 
-            {(engineeringSkills.length > 0 || softwareTools.length > 0) && (
+            {engineeringSkills.length > 0 && (
               <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Technical Skills" />
-                {engineeringSkills.length > 0 && (
-                  <>
-                    <Text style={styles.subCategoryLabel}>Engineering</Text>
-                    <TagBlock items={engineeringSkills} />
-                  </>
-                )}
-                {softwareTools.length > 0 && (
-                  <>
-                    <Text style={styles.subCategoryLabel}>Software &amp; Tools</Text>
-                    <TagBlock items={softwareTools} />
-                  </>
-                )}
+                <TagBlock items={engineeringSkills} />
               </View>
             )}
 
