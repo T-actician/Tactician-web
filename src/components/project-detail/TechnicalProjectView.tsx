@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { FileText } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, FileText } from "lucide-react";
 import { Project } from "@/types/content";
 import Gallery from "@/components/Gallery";
 
@@ -27,6 +28,11 @@ export default function TechnicalProjectView({ project }: { project: Project }) 
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-ink-900/20" />
+        <div className="absolute left-0 right-0 top-0 mx-auto max-w-7xl px-6 pt-6">
+          <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white">
+            <ArrowLeft size={16} /> Back to Projects
+          </Link>
+        </div>
         <div className="absolute bottom-0 mx-auto w-full max-w-7xl px-6 pb-8">
           <p className="text-xs font-bold uppercase tracking-wider text-brand-300">{project.category}</p>
           <h1 className="mt-1 text-3xl font-extrabold text-white sm:text-4xl">{project.title}</h1>
