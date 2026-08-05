@@ -131,6 +131,7 @@ export interface Project {
   summary: string;
   technologies: string[];
   coverImageKey: string;
+  coverImagePosition: string;
   featured: boolean;
   order: number;
   status: "draft" | "published";

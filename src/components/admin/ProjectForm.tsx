@@ -30,6 +30,7 @@ const emptyProject: Partial<Project> = {
   summary: "",
   technologies: [],
   coverImageKey: "",
+  coverImagePosition: "center",
   featured: false,
   status: "draft",
   projectType: "technical",
@@ -398,7 +399,13 @@ export default function ProjectForm({ initial, id }: { initial?: Project; id?: s
         <label className="mb-2 block text-sm font-semibold text-ink-900">Cover Image</label>
         {data.coverImageKey && (
           <div className="relative mb-2 h-40 w-full overflow-hidden rounded-lg">
-            <Image src={`/api/media/${data.coverImageKey}`} alt="" fill className="object-cover" />
+            <Image
+              src={`/api/media/${data.coverImageKey}`}
+              alt=""
+              fill
+              className="object-cover"
+              style={{ objectPosition: data.coverImagePosition || "center" }}
+            />
           </div>
         )}
         <MediaUploader
@@ -406,6 +413,33 @@ export default function ProjectForm({ initial, id }: { initial?: Project; id?: s
           accept={{ "image/*": [] }}
           onUploaded={(r) => update("coverImageKey", r.key as any)}
         />
+
+        {data.coverImageKey && (
+          <div className="mt-3">
+            <p className="mb-2 text-xs font-semibold text-slate-500">
+              Focal point — controls which part stays visible when the image is cropped
+            </p>
+            <div className="grid w-32 grid-cols-3 gap-1 rounded-lg bg-slate-100 p-1">
+              {[
+                "top left", "top", "top right",
+                "left", "center", "right",
+                "bottom left", "bottom", "bottom right",
+              ].map((pos) => (
+                <button
+                  key={pos}
+                  type="button"
+                  title={pos}
+                  onClick={() => update("coverImagePosition", pos as any)}
+                  className={`aspect-square rounded transition ${
+                    (data.coverImagePosition || "center") === pos
+                      ? "bg-brand-600"
+                      : "bg-white hover:bg-slate-200"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div>

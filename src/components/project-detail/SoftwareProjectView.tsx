@@ -22,8 +22,6 @@ function TechGroup({ title, items }: { title: string; items?: string[] }) {
 
 export default function SoftwareProjectView({ project }: { project: Project }) {
   const initial = project.title.trim()[0]?.toUpperCase() || "P";
-  const uploadedVideo = project.videos?.[0];
-  const demoHref = project.demoUrl || (uploadedVideo ? `/api/media/${uploadedVideo.key}` : "");
   const hasTechStack =
     (project.techStackFrontend?.length || 0) +
       (project.techStackBackend?.length || 0) +
@@ -58,11 +56,11 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
               {project.summary && <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60">{project.summary}</p>}
 
               <div className="mt-7 flex flex-wrap gap-3">
-                {demoHref && (
+                {project.demoUrl && (
                   <a
-                    href={demoHref}
-                    target={project.demoUrl ? "_blank" : undefined}
-                    rel={project.demoUrl ? "noopener noreferrer" : undefined}
+                    href={project.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-2 rounded-lg border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
                   >
                     <Play size={15} /> Watch Demo
@@ -112,7 +110,13 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
 
             {project.coverImageKey && (
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
-                <Image src={`/api/media/${project.coverImageKey}`} alt={project.title} fill className="object-cover" />
+                <Image
+                  src={`/api/media/${project.coverImageKey}`}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  style={{ objectPosition: project.coverImagePosition || "center" }}
+                />
               </div>
             )}
           </div>
@@ -132,18 +136,9 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
             </div>
           )}
 
-          {(project.gallery.length > 0 || project.videos.length > 0) && (
+          {project.gallery.length > 0 && (
             <div>
               <h2 className="mb-3 text-xl font-bold text-ink-900">Screenshots</h2>
-              {project.videos.length > 0 && (
-                <div className="mb-4 flex flex-col gap-4">
-                  {project.videos.map((v) => (
-                    <video key={v.key} controls className="w-full rounded-xl shadow-sm" src={`/api/media/${v.key}`}>
-                      Your browser does not support the video tag.
-                    </video>
-                  ))}
-                </div>
-              )}
               <Gallery items={project.gallery} />
             </div>
           )}

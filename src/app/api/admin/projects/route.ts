@@ -13,7 +13,10 @@ export async function GET() {
     return NextResponse.json(projects.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)));
   } catch (err: any) {
     console.error("GET /api/admin/projects failed:", err);
-    return NextResponse.json({ error: err.message || "Failed to load projects" }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message || "Failed to load projects", stack: err.stack },
+      { status: 500 }
+    );
   }
 }
 
@@ -34,6 +37,7 @@ export async function POST(req: NextRequest) {
       summary: body.summary || "",
       technologies: body.technologies || [],
       coverImageKey: body.coverImageKey || "",
+      coverImagePosition: body.coverImagePosition || "center",
       featured: body.featured ?? false,
       order: projects.length,
       status: body.status || "draft",

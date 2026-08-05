@@ -43,6 +43,7 @@ export default function FeaturedProjects({ projects }: { projects: Project[] }) 
                       alt={project.title}
                       fill
                       className="object-cover transition duration-500 group-hover:scale-105"
+                      style={{ objectPosition: project.coverImagePosition || "center" }}
                     />
                   )}
                 </div>

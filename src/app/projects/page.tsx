@@ -33,6 +33,7 @@ export default async function ProjectsPage() {
                     alt={project.title}
                     fill
                     className="object-cover transition duration-500 group-hover:scale-105"
+                    style={{ objectPosition: project.coverImagePosition || "center" }}
                   />
                 )}
               </div>

@@ -18,7 +18,13 @@ export default function TechnicalProjectView({ project }: { project: Project }) 
     <>
       <section className="relative h-[40vh] w-full overflow-hidden">
         {project.coverImageKey && (
-          <Image src={`/api/media/${project.coverImageKey}`} alt={project.title} fill className="object-cover" />
+          <Image
+            src={`/api/media/${project.coverImageKey}`}
+            alt={project.title}
+            fill
+            className="object-cover"
+            style={{ objectPosition: project.coverImagePosition || "center" }}
+          />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-ink-900/20" />
         <div className="absolute bottom-0 mx-auto w-full max-w-7xl px-6 pb-8">
