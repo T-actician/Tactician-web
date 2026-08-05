@@ -69,12 +69,12 @@ function PhoneButton({ number }: { number: string }) {
         <Phone size={14} />
       </button>
       {open && (
-        <div className="absolute right-0 top-12 z-20 w-52 rounded-2xl bg-ink-900 p-4 text-center shadow-xl">
+        <div className="absolute left-1/2 top-12 z-20 w-52 -translate-x-1/2 rounded-2xl bg-ink-900 p-4 text-center shadow-xl">
           <p className="text-xs text-white/60">Call me at</p>
           <p className="mt-1 text-base font-bold text-white">{number}</p>
           <button
             onClick={handleCopy}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 py-2 text-sm font-semibold text-white transition hover:bg-brand-500"
           >
             {copied ? (
               <>
@@ -98,10 +98,10 @@ export default function Hero({ content }: { content: SiteContent }) {
   const bgUrl = hero.backgroundKey ? `/api/media/${hero.backgroundKey}` : "";
 
   return (
-    <section id="home" className="scroll-mt-16 relative pt-14 pb-14">
+    <section id="home" className="scroll-mt-16 relative overflow-hidden pt-14 pb-14">
       {/* Full-bleed background photo - kept vivid, only faded at the very bottom edge */}
       {bgUrl && (
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 -z-10">
           <Image src={bgUrl} alt="" fill priority className="object-cover" />
           <div
             className="absolute inset-0"
@@ -116,9 +116,10 @@ export default function Hero({ content }: { content: SiteContent }) {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 lg:grid-cols-[1.1fr_0.8fr_0.55fr] lg:items-center">
         {/* Left copy */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
+          className="order-1"
         >
           <p className="mb-2 text-lg font-semibold text-brand-600">{hero.greeting}</p>
           <h1 className="text-5xl font-extrabold leading-tight tracking-tight text-ink-900 sm:text-6xl">
@@ -160,15 +161,7 @@ export default function Hero({ content }: { content: SiteContent }) {
                 return <PhoneButton key="phone" number={s.url} />;
               }
               const Icon = SOCIAL_ICONS[s.platform] ?? Mail;
-              const rawUrl = s.url || "";
-              const href =
-                s.platform === "email"
-                  ? `mailto:${rawUrl}`
-                  : rawUrl
-                  ? /^https?:\/\//i.test(rawUrl)
-                    ? rawUrl
-                    : `https://${rawUrl}`
-                  : "#";
+              const href = s.platform === "email" ? `mailto:${s.url}` : s.url || "#";
               return (
                 <a
                   key={s.platform}
@@ -186,10 +179,10 @@ export default function Hero({ content }: { content: SiteContent }) {
 
         {/* Portrait */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="relative mx-auto aspect-[3/4] w-full max-w-md lg:self-end lg:-mb-14"
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className="relative order-3 mx-auto -mb-14 aspect-[3/4] w-full max-w-md lg:order-2 lg:self-end"
         >
           <div className="absolute inset-0 scale-110 rounded-full bg-gradient-to-br from-brand-200/50 to-accent-400/30 blur-3xl" />
           {portraitUrl ? (
@@ -210,10 +203,10 @@ export default function Hero({ content }: { content: SiteContent }) {
 
         {/* Trait cards */}
         <motion.div
-          initial={{ opacity: 0, x: 24 }}
+          initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col gap-3"
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="order-2 flex flex-col gap-3 lg:order-3"
         >
           {traits.map((t) => {
             const Icon = ICONS[t.icon] ?? Zap;

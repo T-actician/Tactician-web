@@ -25,8 +25,8 @@ B2_KEY_ID
 B2_APPLICATION_KEY
 B2_BUCKET_NAME
 B2_ENDPOINT
-CONTACT_NOTIFY_EMAIL   (optional, for contact form email alerts)
-RESEND_API_KEY          (optional, for contact form email alerts)
+CONTACT_NOTIFY_EMAIL   (optional, for contact form email alerts).....
+RESEND_API_KEY          (optional, for contact form email alerts)......
 ```
 
 ## Creating your admin login
