@@ -213,7 +213,7 @@ export default function Hero({ content }: { content: SiteContent }) {
             return (
               <div
                 key={t.title}
-                className="glass flex items-center gap-3 rounded-2xl border-l-4 border-brand-500 px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                className="flex items-center gap-3 rounded-2xl border-l-4 border-brand-500 bg-white/90 px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-brand-600 shadow">
                   <Icon size={16} />
