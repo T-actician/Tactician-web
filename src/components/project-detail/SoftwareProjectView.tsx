@@ -56,9 +56,9 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
               {project.summary && <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/60">{project.summary}</p>}
 
               <div className="mt-7 flex flex-wrap gap-3">
-                {project.demoUrl && (
+                {(project.demoUrl || project.videos.length > 0) && (
                   <a
-                    href={project.demoUrl}
+                    href={project.demoUrl || `/api/media/${project.videos[0].key}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 rounded-lg border border-white/20 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
@@ -143,6 +143,19 @@ export default function SoftwareProjectView({ project }: { project: Project }) {
             </div>
           )}
         </div>
+
+        {project.videos.length > 0 && (
+          <div className="mt-12">
+            <h2 className="mb-4 text-xl font-bold text-ink-900">Videos</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {project.videos.map((v) => (
+                <video key={v.key} controls className="w-full rounded-xl shadow-md">
+                  <source src={`/api/media/${v.key}`} />
+                </video>
+              ))}
+            </div>
+          </div>
+        )}
 
         {project.keyFeatures && project.keyFeatures.length > 0 && (
           <div className="mt-12">
