@@ -414,18 +414,27 @@ export default function CVDocument({
 
   // Technical Skills default from the live site's Skills/Tools sections;
   // anything added in the CV editor is appended on top, not a replacement.
-  const engineeringSkills = mergeUnique(
+  let engineeringSkills = mergeUnique(
     skills.map((s) => s.name),
     cv.engineeringSkills
   );
-  const softwareTools = mergeUnique(
+  let softwareTools = mergeUnique(
     tools.map((t) => t.name),
     cv.softwareTools
   );
 
+  // If the admin has explicitly picked which skills to show for this CV,
+  // narrow both lists down to that whitelist.
+  if (cv.selectedSkillNames && cv.selectedSkillNames.length > 0) {
+    const selected = new Set(cv.selectedSkillNames.map((s) => s.toLowerCase()));
+    engineeringSkills = engineeringSkills.filter((s) => selected.has(s.toLowerCase()));
+    softwareTools = softwareTools.filter((s) => selected.has(s.toLowerCase()));
+  }
+
   const keywordSet = new Set<string>([...engineeringSkills, ...softwareTools, ...cv.softSkills, ...(cv.keywords || [])]);
 
-  const cvProjects = projects.filter((p) => p.status === "published").slice(0, 3);
+  const cvProjects = projects.filter((p) => p.status === "published" && p.includeInCV);
+  const includedCertifications = cv.certifications.filter((c) => c.included !== false);
 
   return (
     <Document
@@ -588,10 +597,10 @@ export default function CVDocument({
               </View>
             )}
 
-            {cv.certifications.length > 0 && (
+            {includedCertifications.length > 0 && (
               <View style={styles.subSection} wrap={false}>
                 <SubSectionHeader title="Certifications" />
-                {cv.certifications.map((c) => (
+                {includedCertifications.map((c) => (
                   <View key={c.id} style={styles.expHeaderRow}>
                     <Text style={[styles.plainText, { flexShrink: 1, paddingRight: 8 }]}>
                       {c.name} — {c.issuer}

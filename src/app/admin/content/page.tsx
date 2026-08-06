@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Plus, Trash2 } from "lucide-react";
@@ -577,7 +575,7 @@ export default function AdminContentPage() {
                     ...content.cv,
                     certifications: [
                       ...content.cv.certifications,
-                      { id: crypto.randomUUID(), name: "Certification Name", issuer: "Issuing Body", year: "2024" },
+                      { id: crypto.randomUUID(), name: "Certification Name", issuer: "Issuing Body", year: "2024", included: true },
                     ],
                   },
                 })
@@ -590,6 +588,16 @@ export default function AdminContentPage() {
           <div className="flex flex-col gap-3">
             {content.cv.certifications.map((cert, i) => (
               <div key={cert.id} className="flex items-center gap-2 rounded-xl bg-slate-50 p-3">
+                <input
+                  type="checkbox"
+                  checked={cert.included !== false}
+                  onChange={(e) => {
+                    const certifications = [...content.cv.certifications];
+                    certifications[i] = { ...certifications[i], included: e.target.checked };
+                    setContent({ ...content, cv: { ...content.cv, certifications } });
+                  }}
+                  title="Include in generated CV"
+                />
                 <input
                   value={cert.name}
                   placeholder="Certification Name"
@@ -633,6 +641,66 @@ export default function AdminContentPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Skill selection for this CV */}
+        <div className="mt-6">
+          <h3 className="text-sm font-bold uppercase tracking-wide text-slate-500">
+            Technical Skills Shown in CV
+          </h3>
+          <p className="mb-3 text-xs text-slate-500">
+            Tick which skills/tools to include — handy for tailoring a CV to a specific job. Leave all unticked to
+            show everything by default.
+          </p>
+          {(() => {
+            const allSkillNames = Array.from(
+              new Set([
+                ...content.skills.map((s) => s.name),
+                ...content.tools.map((t) => t.name),
+                ...content.cv.engineeringSkills,
+                ...content.cv.softwareTools,
+              ])
+            );
+            const selected = content.cv.selectedSkillNames || [];
+            const isAllMode = selected.length === 0;
+
+            function toggleSkill(name: string) {
+              const current = selected.length > 0 ? selected : allSkillNames;
+              const next = current.includes(name) ? current.filter((n) => n !== name) : [...current, name];
+              setContent({ ...content!, cv: { ...content!.cv, selectedSkillNames: next } });
+            }
+
+            return (
+              <div className="flex flex-wrap gap-2">
+                {allSkillNames.map((name) => {
+                  const checked = isAllMode || selected.includes(name);
+                  return (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => toggleSkill(name)}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                        checked
+                          ? "border-brand-600 bg-brand-50 text-brand-700"
+                          : "border-slate-200 bg-white text-slate-400"
+                      }`}
+                    >
+                      {name}
+                    </button>
+                  );
+                })}
+                {!isAllMode && (
+                  <button
+                    type="button"
+                    onClick={() => setContent({ ...content!, cv: { ...content!.cv, selectedSkillNames: [] } })}
+                    className="rounded-full border border-slate-300 px-3 py-1.5 text-xs font-semibold text-slate-500"
+                  >
+                    Reset to show all
+                  </button>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         <a

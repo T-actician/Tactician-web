@@ -1,11 +1,9 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { Plus, GripVertical, Trash2, Pencil, Eye, EyeOff } from "lucide-react";
+import { Plus, GripVertical, Trash2, Pencil, Eye, EyeOff, FileText } from "lucide-react";
 import { Project } from "@/types/content";
 
 export default function AdminProjectsPage() {
@@ -52,6 +50,16 @@ export default function AdminProjectsPage() {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ featured: !p.featured }),
+    });
+    const updated = await res.json();
+    setProjects((prev) => prev.map((x) => (x.id === p.id ? updated : x)));
+  }
+
+  async function toggleIncludeInCV(p: Project) {
+    const res = await fetch(`/api/admin/projects/${p.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ includeInCV: !p.includeInCV }),
     });
     const updated = await res.json();
     setProjects((prev) => prev.map((x) => (x.id === p.id ? updated : x)));
@@ -106,8 +114,18 @@ export default function AdminProjectsPage() {
                         <p className="text-xs text-slate-500">
                           {p.category} · {p.status === "published" ? "Published" : "Draft"}
                           {p.featured && " · Featured"}
+                          {p.includeInCV && " · In CV"}
                         </p>
                       </div>
+                      <button
+                        onClick={() => toggleIncludeInCV(p)}
+                        title={p.includeInCV ? "Remove from CV" : "Include in CV"}
+                        className={`rounded-lg p-2 hover:bg-slate-100 ${
+                          p.includeInCV ? "text-brand-600" : "text-slate-400"
+                        }`}
+                      >
+                        <FileText size={16} />
+                      </button>
                       <button
                         onClick={() => toggleFeatured(p)}
                         title={p.featured ? "Unfeature" : "Feature"}

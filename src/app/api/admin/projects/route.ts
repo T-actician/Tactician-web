@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
       order: projects.length,
       status: body.status || "draft",
       projectType: body.projectType === "software" ? "software" : "technical",
+      includeInCV: body.includeInCV ?? false,
       problemStatement: body.problemStatement || "",
       objectives: body.objectives || "",
       designProcess: body.designProcess || "",

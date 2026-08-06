@@ -42,6 +42,7 @@ export interface CertificationItem {
   name: string;
   issuer: string;
   year: string;
+  included: boolean;
 }
 
 export interface CVData {
@@ -56,6 +57,9 @@ export interface CVData {
   interests: string[];
   strengths: string[];
   values: string[];
+  // Explicit whitelist of skill/tool names to show under Technical Skills.
+  // Empty/undefined means "show everything" (backward compatible default).
+  selectedSkillNames: string[];
 }
 
 export interface Testimonial {
@@ -136,6 +140,7 @@ export interface Project {
   order: number;
   status: "draft" | "published";
   projectType: "technical" | "software";
+  includeInCV: boolean;
   problemStatement: string;
   objectives: string;
   designProcess: string;

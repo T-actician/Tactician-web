@@ -516,6 +516,15 @@ export default function ProjectForm({ initial, id }: { initial?: Project; id?: s
         Featured on homepage
       </label>
 
+      <label className="flex items-center gap-2 text-sm font-medium text-ink-900">
+        <input
+          type="checkbox"
+          checked={!!data.includeInCV}
+          onChange={(e) => update("includeInCV", e.target.checked as any)}
+        />
+        Include in generated CV
+      </label>
+
       <div className="fixed bottom-0 left-60 right-0 flex justify-end gap-3 border-t bg-white p-4">
         <button
           disabled={saving}
