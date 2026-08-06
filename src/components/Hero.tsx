@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Download, Mail, Phone, Copy, Check, Zap, Target, Shield, Lightbulb } from "lucide-react";
@@ -30,11 +31,20 @@ function highlightKeywords(text: string, words: string[]) {
 function PhoneButton({ number }: { number: string }) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+  const [mounted, setMounted] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      const target = e.target as Node;
+      if (ref.current?.contains(target)) return;
+      if (popoverRef.current?.contains(target)) return;
+      setOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -44,9 +54,13 @@ function PhoneButton({ number }: { number: string }) {
     const isMobile = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
     if (isMobile) {
       window.location.href = `tel:${number.replace(/[^\d+]/g, "")}`;
-    } else {
-      setOpen((o) => !o);
+      return;
     }
+    if (!open && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setCoords({ top: rect.bottom + 8, left: rect.left + rect.width / 2 });
+    }
+    setOpen((o) => !o);
   }
 
   async function handleCopy() {
@@ -59,35 +73,42 @@ function PhoneButton({ number }: { number: string }) {
     }
   }
 
+  const popover = open && (
+    <div
+      ref={popoverRef}
+      style={{ position: "fixed", top: coords.top, left: coords.left, transform: "translateX(-50%)" }}
+      className="z-[100] w-52 rounded-2xl bg-ink-900 p-4 text-center shadow-xl"
+    >
+      <p className="text-xs text-white/60">Call me at</p>
+      <p className="mt-1 text-base font-bold text-white">{number}</p>
+      <button
+        onClick={handleCopy}
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 py-2 text-sm font-semibold text-white transition hover:bg-brand-500"
+      >
+        {copied ? (
+          <>
+            <Check size={14} /> Copied
+          </>
+        ) : (
+          <>
+            <Copy size={14} /> Copy Number
+          </>
+        )}
+      </button>
+    </div>
+  );
+
   return (
     <div ref={ref} className="relative">
       <button
+        ref={buttonRef}
         onClick={handleClick}
         className="glass flex h-9 w-9 items-center justify-center rounded-full text-slate-600 transition hover:text-brand-600"
         aria-label="Phone number"
       >
         <Phone size={14} />
       </button>
-      {open && (
-        <div className="absolute left-1/2 top-12 z-20 w-52 -translate-x-1/2 rounded-2xl bg-ink-900 p-4 text-center shadow-xl">
-          <p className="text-xs text-white/60">Call me at</p>
-          <p className="mt-1 text-base font-bold text-white">{number}</p>
-          <button
-            onClick={handleCopy}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 py-2 text-sm font-semibold text-white transition hover:bg-brand-500"
-          >
-            {copied ? (
-              <>
-                <Check size={14} /> Copied
-              </>
-            ) : (
-              <>
-                <Copy size={14} /> Copy Number
-              </>
-            )}
-          </button>
-        </div>
-      )}
+      {mounted && popover && createPortal(popover, document.body)}
     </div>
   );
 }
