@@ -17,6 +17,7 @@ export const defaultContent: SiteContent = {
   socials: [
     { platform: "linkedin", url: "" },
     { platform: "github", url: "" },
+    { platform: "website", url: "" },
     { platform: "email", url: "" },
     { platform: "phone", url: "" },
   ],
@@ -87,7 +88,12 @@ export function normalizeContent(raw: Partial<SiteContent> | null | undefined): 
     ...defaultContent,
     ...r,
     hero: { ...defaultContent.hero, ...(r.hero || {}) },
-    socials: r.socials && r.socials.length > 0 ? r.socials : defaultContent.socials,
+    socials: (() => {
+      const existing = r.socials && r.socials.length > 0 ? r.socials : [];
+      const existingPlatforms = new Set(existing.map((s) => s.platform));
+      const missing = defaultContent.socials.filter((d) => !existingPlatforms.has(d.platform));
+      return [...existing, ...missing];
+    })(),
     traits: r.traits && r.traits.length > 0 ? r.traits : defaultContent.traits,
     about: {
       ...defaultContent.about,

@@ -290,6 +290,18 @@ function IconGithub() {
     </Svg>
   );
 }
+function IconGlobe() {
+  return (
+    <Svg width={9} height={9} viewBox="0 0 24 24">
+      <Path
+        d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 0c2.5 2.5 4 6 4 10s-1.5 7.5-4 10c-2.5-2.5-4-6-4-10s1.5-7.5 4-10zM2.5 9h19M2.5 15h19"
+        stroke={NAVY}
+        strokeWidth={1.6}
+        fill="none"
+      />
+    </Svg>
+  );
+}
 
 function splitToBullets(text: string): string[] {
   if (!text) return [];
@@ -411,6 +423,7 @@ export default function CVDocument({
 
   const linkedin = socials.find((s) => s.platform === "linkedin")?.url;
   const github = socials.find((s) => s.platform === "github")?.url;
+  const website = socials.find((s) => s.platform === "website")?.url;
 
   // Technical Skills default from the live site's Skills/Tools sections;
   // anything added in the CV editor is appended on top, not a replacement.
@@ -485,6 +498,14 @@ export default function CVDocument({
                 <IconGithub />
               </View>
               <Text style={styles.contactText}>{github.replace(/^https?:\/\//, "")}</Text>
+            </View>
+          )}
+          {website && (
+            <View style={styles.contactItem}>
+              <View style={styles.contactIconBox}>
+                <IconGlobe />
+              </View>
+              <Text style={styles.contactText}>{website.replace(/^https?:\/\//, "")}</Text>
             </View>
           )}
         </View>

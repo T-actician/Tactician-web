@@ -156,6 +156,7 @@ export default function Hero({ content }: { content: SiteContent }) {
               Connect with me
             </span>
             {socials.map((s) => {
+              if (s.platform === "website") return null;
               if (s.platform === "phone") {
                 if (!s.url) return null;
                 return <PhoneButton key="phone" number={s.url} />;
