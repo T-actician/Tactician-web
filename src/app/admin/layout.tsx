@@ -25,8 +25,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
-      <aside className="flex w-60 flex-col justify-between bg-ink-900 p-5 text-white">
+    <div className="flex h-screen bg-slate-100">
+      <aside className="flex h-screen w-60 flex-shrink-0 flex-col justify-between overflow-y-auto bg-ink-900 p-5 text-white">
         <div>
           <p className="mb-8 px-2 text-sm font-bold">Tactician Admin</p>
           <nav className="flex flex-col gap-1">
