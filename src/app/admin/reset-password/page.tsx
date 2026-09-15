@@ -6,6 +6,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { KeyRound } from "lucide-react";
+import PasswordField from "@/components/PasswordField";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -79,24 +80,23 @@ function ResetPasswordForm() {
           <form onSubmit={handleSubmit}>
             {error && <p className="mb-4 rounded-lg bg-red-500/20 px-3 py-2 text-sm text-red-200">{error}</p>}
 
-            <label className="mb-1 block text-xs text-white/60">New Password</label>
-            <input
-              type="password"
+            <PasswordField
+              id="password"
+              label="New Password"
+              value={password}
+              onChange={setPassword}
               required
               minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mb-4 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm outline-none focus:border-brand-400"
             />
 
-            <label className="mb-1 block text-xs text-white/60">Confirm New Password</label>
-            <input
-              type="password"
+            <PasswordField
+              id="confirmPassword"
+              label="Confirm New Password"
+              value={confirmPassword}
+              onChange={setConfirmPassword}
               required
               minLength={8}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="mb-6 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm outline-none focus:border-brand-400"
+              className="mb-6"
             />
 
             <button

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabaseBrowser } from "@/lib/supabase-browser";
 import { Lock } from "lucide-react";
+import PasswordField from "@/components/PasswordField";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -51,13 +52,13 @@ export default function AdminLogin() {
           className="mb-4 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm outline-none focus:border-brand-400"
         />
 
-        <label className="mb-1 block text-xs text-white/60">Password</label>
-        <input
-          type="password"
-          required
+        <PasswordField
+          id="password"
+          label="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mb-6 w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm outline-none focus:border-brand-400"
+          onChange={setPassword}
+          required
+          className="mb-6"
         />
 
         <button
