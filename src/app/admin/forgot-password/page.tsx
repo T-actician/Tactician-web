@@ -47,7 +47,7 @@ export default function ForgotPassword() {
         {status === "sent" ? (
           <div className="text-center">
             <p className="rounded-lg bg-accent-500/20 px-3 py-3 text-sm text-accent-200">
-              If that email is registered, a reset link has been sent. Check your inbox for further instructions.
+              A password reset link has been sent. Check your inbox or spam folder for further instructions.
             </p>
             <Link
               href="/admin/login"
