@@ -11,8 +11,11 @@ export async function GET(
   if (!fullKey) return NextResponse.json({ error: "Missing key" }, { status: 400 });
 
   try {
-    const url = await getSignedGetUrl(fullKey, 3600);
-    return NextResponse.redirect(url);
+    const url = await getSignedGetUrl(fullKey, 604800); // 7 days (SigV4 max)
+    const res = NextResponse.redirect(url);
+    // Cache the redirect itself so repeat visits skip this server hop entirely
+    res.headers.set("Cache-Control", "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800");
+    return res;
   } catch {
     return NextResponse.json({ error: "File not found" }, { status: 404 });
   }
