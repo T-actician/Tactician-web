@@ -148,8 +148,7 @@ export default function Hero({ content }: { content: SiteContent }) {
             <span className="text-gradient">{hero.lastName.toUpperCase()}</span>
           </h1>
           <h2 className="mt-2 text-2xl font-semibold text-slate-700 sm:text-3xl">
-            Electrical &amp; <span className="text-brand-600">Electronics</span>{" "}
-            <span className="text-accent-500">Engineer</span>
+            {highlightKeywords(hero.role, ["Electronics", "Engineer"])}
           </h2>
           <div className="glass mt-5 inline-block max-w-lg rounded-2xl px-5 py-4 shadow-sm">
             <p className="text-lg font-bold text-black">
