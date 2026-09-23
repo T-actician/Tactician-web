@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Alex Kariuki | Electrical & Electronics Engineer",
+  title: "Alex Kariuki",
   description:
     "Portfolio of Alex Kariuki — Electrical & Electronics Engineer specializing in power systems, control, and automation.",
 };
