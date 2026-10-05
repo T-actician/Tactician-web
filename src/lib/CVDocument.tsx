@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     color: "#111827",
     flexShrink: 1,
+    minWidth: 0,
   },
   itemLink: {
     fontSize: 9,
@@ -179,8 +180,9 @@ const styles = StyleSheet.create({
   expTitleRow: {
     flexDirection: "row",
     alignItems: "flex-start",
-    flexShrink: 1,
     flexGrow: 1,
+    flexShrink: 1,
+    minWidth: 0,
     paddingRight: 8,
   },
   expDot: {
@@ -236,38 +238,38 @@ const styles = StyleSheet.create({
   linkCapsule: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
+    borderWidth: 0.75,
     borderColor: NAVY,
-    borderRadius: 10,
-    paddingVertical: 3,
-    paddingHorizontal: 8,
+    borderRadius: 7,
+    paddingVertical: 2,
+    paddingHorizontal: 7,
     textDecoration: "none",
   },
   linkCapsuleText: {
-    fontSize: 9,
+    fontSize: 8,
     color: NAVY,
     lineHeight: 1,
   },
   projectLinkCapsule: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
+    borderWidth: 0.75,
     borderColor: NAVY,
-    borderRadius: 8,
-    paddingVertical: 2,
-    paddingHorizontal: 7,
+    borderRadius: 6,
+    paddingVertical: 1.5,
+    paddingHorizontal: 6,
     textDecoration: "none",
     flexShrink: 0,
   },
   projectLinkCapsuleText: {
-    fontSize: 8,
+    fontSize: 7.5,
     color: NAVY,
     lineHeight: 1,
   },
   projectTitleRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
   },
 });
 
