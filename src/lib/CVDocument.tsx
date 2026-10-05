@@ -1,5 +1,5 @@
 import React from "react";
-import { Document, Page, Text, View, StyleSheet, Svg, Path, Circle } from "@react-pdf/renderer";
+import { Document, Page, Text, View, StyleSheet, Svg, Path, Circle, Link } from "@react-pdf/renderer";
 import { SiteContent, Project } from "@/types/content";
 
 const NAVY = "#1c3f6e";
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: "Helvetica-Bold",
     color: "#111827",
+    flexShrink: 1,
   },
   itemLink: {
     fontSize: 9,
@@ -179,6 +180,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     flexShrink: 1,
+    flexGrow: 1,
     paddingRight: 8,
   },
   expDot: {
@@ -230,6 +232,42 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica-Bold",
     color: NAVY,
     marginBottom: 5,
+  },
+  linkCapsule: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: NAVY,
+    borderRadius: 10,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    textDecoration: "none",
+  },
+  linkCapsuleText: {
+    fontSize: 9,
+    color: NAVY,
+    lineHeight: 1,
+  },
+  projectLinkCapsule: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: NAVY,
+    borderRadius: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    textDecoration: "none",
+    flexShrink: 0,
+  },
+  projectLinkCapsuleText: {
+    fontSize: 8,
+    color: NAVY,
+    lineHeight: 1,
+  },
+  projectTitleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
   },
 });
 
@@ -402,9 +440,17 @@ function ExperienceEntry({ exp }: { exp: SiteContent["experience"][number] }) {
 }
 
 function ProjectEntry({ project }: { project: Project }) {
+  const link = project.liveUrl || project.demoUrl;
   return (
     <View style={styles.projectBlock} wrap={false}>
-      <Text style={styles.itemTitle}>{project.title}</Text>
+      <View style={styles.projectTitleRow}>
+        <Text style={[styles.itemTitle, { paddingRight: 8 }]}>{project.title}</Text>
+        {link && (
+          <Link src={link} style={styles.projectLinkCapsule}>
+            <Text style={styles.projectLinkCapsuleText}>View Project</Text>
+          </Link>
+        )}
+      </View>
       {project.summary && <Text style={styles.projectSummary}>{project.summary}</Text>}
       <BulletBlock text={project.results || project.implementation} />
     </View>
@@ -485,28 +531,28 @@ export default function CVDocument({
             </View>
           )}
           {linkedin && (
-            <View style={styles.contactItem}>
+            <Link src={linkedin} style={styles.linkCapsule}>
               <View style={styles.contactIconBox}>
                 <IconLinkedin />
               </View>
-              <Text style={styles.contactText}>{linkedin.replace(/^https?:\/\//, "")}</Text>
-            </View>
+              <Text style={styles.linkCapsuleText}>{linkedin.replace(/^https?:\/\//, "")}</Text>
+            </Link>
           )}
           {github && (
-            <View style={styles.contactItem}>
+            <Link src={github} style={styles.linkCapsule}>
               <View style={styles.contactIconBox}>
                 <IconGithub />
               </View>
-              <Text style={styles.contactText}>{github.replace(/^https?:\/\//, "")}</Text>
-            </View>
+              <Text style={styles.linkCapsuleText}>{github.replace(/^https?:\/\//, "")}</Text>
+            </Link>
           )}
           {website && (
-            <View style={styles.contactItem}>
+            <Link src={website} style={styles.linkCapsule}>
               <View style={styles.contactIconBox}>
                 <IconGlobe />
               </View>
-              <Text style={styles.contactText}>{website.replace(/^https?:\/\//, "")}</Text>
-            </View>
+              <Text style={styles.linkCapsuleText}>{website.replace(/^https?:\/\//, "")}</Text>
+            </Link>
           )}
         </View>
         <View style={styles.topDivider} />
